@@ -17,6 +17,7 @@ phonenumbers==8.12.31
 Pillow==8.3.2
 platformdirs==2.3.0
 py-moneyed==1.2
+python-decouple==3.5
 pytz==2021.1
 requests==2.26.0
 requests-file==1.5.1
