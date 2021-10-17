@@ -1,0 +1,79 @@
+{% extends 'product/base.html' %}
+{% load static %}
+
+
+
+
+{% block content %}
+<div class="row">
+	<div class="span12">
+		<div class="well well-small">
+			<h1>سبد خرید<small class="pull-right"> {{details_order.count}} کالا </small></h1>
+			<hr class="soften"/>	
+			{% if details_order.count != 0 %}
+				<table class="table table-bordered table-condensed">
+					<thead>
+					<tr>
+						<th>عنوان محصول</th>
+						<th>عکس</th>
+						<th>جزییات محصول</th>
+						<th>قیمت واحد</th>
+						<th>تعداد</th>
+						<th>قیمت کل</th>
+					</tr>
+					</thead>
+					<tbody>
+						{% for detail in details_order %}
+							<tr>
+								<td><a href="{% url 'product:detail' detail.product.slug %}">{{detail.product.title}}</a></td>
+								<td><img width="100" src="{{detail.product.image.url}}" alt=""></td>
+								<td>مدل : {{detail.product.pattern}}<br>بافت : {{detail.product.texture}}<br>Carate : 22</td>
+								<td>{{detail.product.price}}</td>
+								<td>{{detail.count}}</td>
+								<td>{{detail.total_price_detail}}</td>
+								<td><span class="badge badge-warning"><a href="{% url 'order:delete-item' detail.id %}">حذف</a></span></td>
+							</tr>
+						{% endfor %}
+						<tr>
+							<th class="text-left" colspan="6" class="alignR">قیمت کل سبد:	</th>
+							<td>{{total}}</td>
+						</tr>
+						<tr>
+							<th class="text-left" colspan="6" class="alignR">هزینه ارسال:	</th>
+							<td>0</td>
+						</tr>
+						<tr>
+							<th class="text-left" colspan="6" class="alignR">مبلغ قابل پرداخت:	</th>
+							<th>{{total}}</th>
+						</tr>
+					</tbody>
+				</table><br/>
+				<table class="table table-bordered">
+				<tbody>
+					<tr>
+						<td class="text-left"> 
+							<form class="form-inline">
+								<label style="min-width:159px"> کد تخفیف: </label> 
+								<input type="text" class="input-medium" placeholder="کد تخفیف">
+								<button type="submit" class="shopBtn">ثبت</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+				<tbody>
+					<tr>
+						<td class="text-left"> 
+							<a href="{% url 'order:request' %}" class="shopBtn">پرداخت</a>
+						</td>
+					</tr>
+				</tbody>
+				</table>
+			{% else %}
+				<div class="alert alert-warning">
+					<h3>سبد خرید شما خالی است.</h3>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}

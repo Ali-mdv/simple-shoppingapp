@@ -1,0 +1,143 @@
+{% extends 'product/base.html' %}
+{% load static %}
+{% load render_partial %}
+
+
+{% block sidebar %}
+	{% render_partial 'sidebar_pattern' %}
+{% endblock %}
+
+
+{% block content %}
+<div class="span9">
+	<ul class="breadcrumb">
+		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
+		<li><a href="products.html">Items</a> <span class="divider">/</span></li>
+		<li class="active">Preview</li>
+	</ul>	
+	<div class="well well-small">
+		<div class="row-fluid detail-display">
+			<div class="span5">
+				<div id="myCarousel" class="carousel slide cntr">
+					<div class="carousel-inner">
+						{% for picture in product_gallery %}
+							<div class="item {{forloop.first|yesno:'active,'}}">
+								<a href="#"> <img class='image-gallery' src="{{picture.image.url}}" alt="{{picture.title}}"></a>
+							</div>
+						{% endfor %}
+					</div>
+					<a class="left carousel-control" href="#myCarousel" data-slide="prev">›</a>
+					<a class="right carousel-control" href="#myCarousel" data-slide="next">‹</a>
+				</div>
+			</div>
+			<div class="span7">
+				<h3>{{product.title}}</h3>
+				<hr class="soft"/>
+				<form class="form-horizontal qtyFrm" method='post' action="{% url 'order:add_order' %}">{% csrf_token %}
+					<div class="control-group">
+						{{new_order_form.product_id}}
+						<label class="control-label"><span>قیمت:</span></label>
+						<div class="controls">
+							{{product.price}}
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label"><span>تعداد</span></label>
+						<div class="controls">
+							{{new_order_form.count}}
+						</div>
+					</div>
+					<!-- <div class="control-group">
+						<label class="control-label"><span>رنگ</span></label>
+						<div class="controls">
+							<select class="span11">
+								<option>Red</option>
+								<option>Purple</option>
+								<option>Pink</option>
+								<option>Red</option>
+							</select>
+						</div>
+					</div> -->
+					<h4>100 items in stock</h4>
+					<p>Nowadays the lingerie industry is one of the most successful business spheres.
+					Nowadays the lingerie industry is one of ...
+					<p>
+					<button type="submit" class="shopBtn"><span class=" icon-shopping-cart"></span>افزودن به سبد خرید</button>
+				</form>
+			</div>
+		</div>
+
+		<hr class="softn clr"/>
+
+		<div>
+			<h5 style='font-size:20px;'>تگ ها:
+				{% for tag in product.tag_set.all %}
+					<small>{{tag}} - </small>
+				{% endfor %}
+			</h5>
+			
+		</div>
+
+		<ul id="productDetail" class="nav nav-tabs">
+			<li class="active"><a href="#home" data-toggle="tab">مشخصات محصول</a></li>
+			<li class=""><a href="#text" data-toggle="tab">توضیحات محصول</a></li>
+			<li class=""><a href="#profile" data-toggle="tab">محصولات مشابه</a></li>
+		</ul>
+		<div id="myTabContent" class="tab-content tabWrapper">
+			<div class="tab-pane fade active in" id="home">
+				<table class="table table-striped">
+					<tbody>
+						<tr class="techSpecRow">
+							<th class="techSpecTD1">رنگ:</th>
+							<td class="techSpecTD2">{{product.color}}</td>
+						</tr>
+						<tr class="techSpecRow">
+							<th class="techSpecTD1">مدل:</th>
+							<td class="techSpecTD2">{{product.pattern}}</td>
+						</tr>
+						<tr class="techSpecRow">
+							<th class="techSpecTD1">طرح بافت:</th>
+							<td class="techSpecTD2">{{product.texture}}</td>
+						</tr>
+						<tr class="techSpecRow">
+							<th class="techSpecTD1">Brand:</th>
+							<td class="techSpecTD2">Shock Absorber</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="tab-pane fade" id="text">
+				<div class="row-fluid">	  
+					{{product.description}}
+				</div>
+			</div>
+			<div class="tab-pane fade" id="profile">
+				{% for product in similar_products %}
+					<div class="row-fluid">	  
+						<div class="span2">
+							<img src="{{product.image.url}}" alt="">
+						</div>
+						<div class="span6">
+							<h5>{{product.title}}</h5>
+							<p>{{product.description}}</p>
+						</div>
+						<div class="span4 alignR">
+							<form class="form-horizontal qtyFrm">
+								<h3>{{product.price}}</h3>
+								<label class="checkbox">
+									<input type="checkbox">  Adds product to compair
+								</label><br>
+								<div class="btn-group">
+									<a href="product_details.html" class="defaultBtn"><span class=" icon-shopping-cart"></span> Add to cart</a>
+									<a href="{% url 'product:detail' product.slug %}" class="shopBtn">نمایش محصول</a>
+								</div>
+							</form>
+						</div>
+					</div>
+					<hr class="soft">
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

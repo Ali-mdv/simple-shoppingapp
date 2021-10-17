@@ -1,0 +1,137 @@
+{% extends 'product/base.html' %}
+{% load static %}
+{% load render_partial %}
+
+
+{% block sidebar %}
+	{% render_partial 'sidebar_pattern' %}
+{% endblock %}
+
+{% block content %}
+	<div class="span9">
+		<div class="well np">
+			<div id="myCarousel" class="carousel slide homCar">
+				<div class="carousel-inner">
+					{% for item in slider_items %}
+						<div class="item {{forloop.first|yesno:'active,'}}">
+							<a target='_blank' href="{{item.link}}"><img style="width:100%" src="{{item.image.url}}" alt="bootstrap ecommerce templates"></a>
+							<div class="carousel-caption">
+								<h4 style="float: rightd;">{{item.title}}</h4>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+				<a class="left carousel-control" href="#myCarousel" data-slide="prev">&rsaquo;</a>
+				<a class="right carousel-control" href="#myCarousel" data-slide="next">&lsaquo;</a>
+			</div>
+		</div>
+<!--
+New Products
+-->
+		<div class="well well-small">
+			<h3>محصولات جدید</h3>
+			<hr class="soften"/>
+			<div class="row-fluid">
+				<div id="newProductCar" class="carousel slide">
+					<div class="carousel-inner">
+						{% for group in new_products_grouper %}
+							<div class="item {{forloop.first|yesno:'active,'}}">
+								<ul class="thumbnails">
+									{% for product in group %}
+										<li class="span3">
+											<div class="thumbnail">
+												<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart"><span class="icon-search"></span> مشاهده</a>
+												<a href="{% url 'product:detail' product.slug %}">
+													<img src="{{product.image.url}}" alt="bootstrap-ring">
+												</a>
+											</div>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						{% endfor %}
+		   			</div>
+					<a class="right carousel-control right-slider-new-product" href="#newProductCar" data-slide="prev">&rsaquo;</a>
+					<a class="left carousel-control left-slider-new-product" href="#newProductCar" data-slide="next">&lsaquo;</a>
+		  		</div>
+			</div>
+			<div class="row-fluid">
+				<ul class="thumbnails">
+					{% for product in random_choices %}
+						<li class="span4">
+							<div class="thumbnail">
+								<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart"><span class="icon-search"></span> مشاهده</a>
+								<a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt=""></a>
+								<div class="caption cntr">
+									<p>{{product.title}}</p>
+									<p><strong>{{product.price}}</strong></p>
+									<h4><a class="shopBtn" href="#" title="add to cart"> Add to cart </a></h4>
+									<div class="actionList">
+										<a class="pull-left" href="#">Add to Wish List </a> 
+										<a class="pull-left" href="#"> Add to Compare </a>
+									</div> 
+									<br class="clr">
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	<!--
+	Featured Products
+	-->
+		<div class="well well-small">
+			<h3><a class="btn btn-mini pull-right" href="{% url 'product:special_products' %}" title="View more">VIew More<span class="icon-plus"></span></a>محصولات ویژه</h3>
+			<hr class="soften"/>
+			<div class="row-fluid">
+				<ul class="thumbnails">
+					{% for product in special_products %}
+						<li class="span4">
+							<div class="thumbnail">
+								<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart"><span class="icon-search"></span> مشاهده</a>
+								<a  href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt=""></a>
+								<div class="caption">
+									<h5>{{product.title}}</h5>
+<!-- 									<h4>
+										<span class="pull-left"><small>{{product.price}}</small></span>
+									</h4> -->
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>	
+			</div>
+		</div>
+	
+		<div class="well well-small">
+			<h3><a class="btn btn-mini pull-right" href="{% url 'product:popular_products' %}" title="View more">VIew More<span class="icon-plus"></span></a>محصولات پر بازدید</h3>
+			<hr class="soften"/>
+			<div class="row-fluid">
+				<ul class="thumbnails">
+					{% for product in popular_products %}
+						<li class="span4">
+							<div class="thumbnail">
+								<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart"><span class="icon-search"></span> مشاهده</a>
+								<a  href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt=""></a>
+								<div class="caption">
+									<h5>{{product.title}}</h5>
+<!-- 									<h4>
+										<span class="pull-left"><small>{{product.price}}</small></span>
+									</h4> -->
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>	
+			</div>
+		</div>
+
+
+		<hr>
+		<div class="well well-small">
+			<a class="btn btn-mini pull-right" href="#">View more <span class="icon-plus"></span></a>
+			محصولات پر فروش 
+		</div>
+	</div>
+{% endblock %}

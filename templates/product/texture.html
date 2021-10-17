@@ -1,0 +1,24 @@
+{%  extends 'product/base.html' %}
+{% load render_partial %}
+
+
+
+{% block sidebar %}
+	{% render_partial 'sidebar_pattern' %}
+{% endblock %}
+
+{% block content %}
+    <div class="well well-small">
+        <h3>Our Patterns </h3>
+        <div class="row-fluid">
+            <ul>
+                {% for texture in textures %}
+                <p>
+                    <a href="{% url 'product:products_texture' texture.slug %}">{{texture}}</a>
+                </p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
