@@ -24,15 +24,20 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('product.urls',namespace='product')),
-    path('login/',Login.as_view(),name='login'),
-    path('contact/',include('contact.urls')),
-    path('',include('django.contrib.auth.urls')),
-    path('account/',include('users.urls')),
-    path('order/',include('product_order.urls')),
+    path('', include('product.urls', namespace='product')),
+    path('login/', Login.as_view(), name='login'),
+    path('contact/', include('contact.urls')),
+    path('', include('django.contrib.auth.urls')),
+    path('account/', include('users.urls')),
+    path('order/', include('product_order.urls')),
 
-    path('navbar_login',navbar_login,name='navbar_login'),
-    path('sidebar_pattern',sidebar_pattern,name='sidebar_pattern'),
+    path('navbar_login', navbar_login, name='navbar_login'),
+    path('sidebar_pattern', sidebar_pattern, name='sidebar_pattern'),
+]
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        path("__debug__/", include(debug_toolbar.urls)),
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

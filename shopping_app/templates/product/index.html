@@ -60,16 +60,14 @@ New Products
 					{% for product in random_choices %}
 						<li class="span4">
 							<div class="thumbnail">
-								<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart"><span class="icon-search"></span> مشاهده</a>
+								<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart">
+									<span class="icon-search"></span> مشاهده
+								</a>
 								<a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt=""></a>
 								<div class="caption cntr">
 									<p>{{product.title}}</p>
 									<p><strong>{{product.price}}</strong></p>
 									<h4><a class="shopBtn" href="#" title="add to cart"> Add to cart </a></h4>
-									<div class="actionList">
-										<a class="pull-left" href="#">Add to Wish List </a> 
-										<a class="pull-left" href="#"> Add to Compare </a>
-									</div> 
 									<br class="clr">
 								</div>
 							</div>
@@ -82,14 +80,20 @@ New Products
 	Featured Products
 	-->
 		<div class="well well-small">
-			<h3><a class="btn btn-mini pull-right" href="{% url 'product:special_products' %}" title="View more">VIew More<span class="icon-plus"></span></a>محصولات ویژه</h3>
+			<h3>
+				<a class="btn btn-mini pull-right" href="{% url 'product:special_products' %}" title="View more">VIew More
+					<span class="icon-plus"></span>
+				</a>محصولات ویژه
+			</h3>
 			<hr class="soften"/>
 			<div class="row-fluid">
 				<ul class="thumbnails">
 					{% for product in special_products %}
 						<li class="span4">
 							<div class="thumbnail">
-								<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart"><span class="icon-search"></span> مشاهده</a>
+								<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart">
+									<span class="icon-search"></span> مشاهده
+								</a>
 								<a  href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt=""></a>
 								<div class="caption">
 									<h5>{{product.title}}</h5>
