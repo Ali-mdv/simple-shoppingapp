@@ -1,0 +1,20 @@
+{% for product in products %}
+<div class="product-thumb clearfix">
+    <div class="image"><a href="{% url 'product:detail' product.slug %}">
+        <img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
+    <div class="caption">
+      <h4><a href="{% url 'product:detail' product.slug %}">{{product.title}}</a></h4>
+        <p class="price"> 
+            {% if product.is_special %}
+                <span class="price-new">{{product.price}}</span> 
+                <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+            {% else %}
+                <span class="price-new">{{product.price}}</span> 
+            {% endif %}
+        </p>
+        <div class="stars-outer">
+            <div class="stars-inner">{{product.ratings.get.average}}</div>
+        </div>
+    </div>
+</div>
+{% endfor %}

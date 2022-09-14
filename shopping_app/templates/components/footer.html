@@ -1,0 +1,70 @@
+{% load static %}
+
+<footer id="footer">
+    <div class="fpart-first">
+      <div class="container">
+        <div class="row">
+          <div class="contact col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <h5>اطلاعات تماس</h5>
+            <ul>
+              <li class="address"><i class="fa fa-map-marker"></i>میدان تایمز، شماره 77، نیویورک</li>
+              <li class="mobile"><i class="fa fa-phone"></i>+21 9898777656</li>
+              <li class="email"><i class="fa fa-envelope"></i>برقراری ارتباط از طریق <a href="{% url 'contact:contact_us' %}">تماس با ما</a>
+            </ul>
+          </div>
+          <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
+            <h5>اطلاعات</h5>
+            <ul>
+              <li><a href="{% url 'contact:about_us' %}">درباره ما</a></li>
+              <li><a href="{% url 'contact:about_us' %}">شرایط و قوانین</a></li>
+              <li><a href="{% url 'contact:faq' %}">سوالات متداول</a></li>
+            </ul>
+          </div>
+          <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
+            <h5>خدمات مشتریان</h5>
+            <ul>
+              <li><a href="{% url 'contact:contact_us' %}">تماس با ما</a></li>
+            </ul>
+          </div>
+          <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
+            <h5>امکانات جانبی</h5>
+            <ul>
+              <li><a href="#">برند ها</a></li>
+              <li><a href="#">کارت هدیه</a></li>
+              <li><a href="#">بازاریابی</a></li>
+              <li><a href="#">ویژه ها</a></li>
+            </ul>
+          </div>
+          <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
+            <h5>حساب من</h5>
+            <ul>
+              <li><a href="{% url 'users:profile' %}">حساب کاربری</a></li>
+              <li><a href="#">تاریخچه سفارشات</a></li>
+              <li><a href="#">لیست علاقه مندی</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fpart-second">
+      <div class="container">
+        <div id="powered" class="clearfix">
+          <div class="powered_text pull-left flip">
+            <p>shahre-taab.com - 2022 © Copyright</p>
+          </div>
+          <div class="social pull-right flip"> 
+            <a href="#" target="_blank"> <img data-toggle="tooltip" src="{% static '/product/image/socialicons/facebook.png' %}" alt="Facebook" title="Facebook"></a> 
+            <a href="#" target="_blank"> <img data-toggle="tooltip" src="{% static '/product/image/socialicons/twitter.png' %}" alt="Twitter" title="Twitter"> </a> 
+            <a href="#" target="_blank"> <img data-toggle="tooltip" src="{% static '/product/image/socialicons/google_plus.png' %}" alt="Google+" title="Google+"> </a> 
+            <a href="#" target="_blank"> <img data-toggle="tooltip" src="{% static '/product/image/socialicons/pinterest.png' %}" alt="Pinterest" title="Pinterest"> </a> 
+            <a href="#" target="_blank"> <img data-toggle="tooltip" src="{% static '/product/image/socialicons/rss.png' %}" alt="RSS" title="RSS"> </a> </div>
+        </div>
+        <div class="bottom-row">
+          <div class="custom-text text-center">
+            <p>برای استفاده از مطالب فروشگاه شهر تاب، داشتن «هدف غیرتجاری» و ذکر «منبع» کافیست. تمام حقوق اين وب‌سايت نیز برای این فروشگاه آنلاین است است.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="back-top"><a data-toggle="tooltip" title="بازگشت به بالا" href="javascript:void(0)" class="backtotop"><i class="fa fa-chevron-up"></i></a></div>
+  </footer>

@@ -1,0 +1,60 @@
+{% load static %}
+{% load base_tags %}
+
+<aside id="column-left" class="col-sm-3 hidden-xs">
+    <h3 class="subtitle">دسته ها</h3>
+    <div class="box-category">
+      <ul id="cat_accordion">
+        {% category_aside %}
+      </ul>
+    </div>
+    {% if request.resolver_match.url_name == "home" %}
+    <h3 class="subtitle">پربازدیدترین</h3>
+    <div class="side-item">
+      {% most_visited_products_sidebar 5 %}
+    </div>
+    {% else %}
+    <h3 class="subtitle">پربازدیدترین</h3>
+    <div class="side-item">
+      {% best_seller_products_sidebar 5 %}
+    </div>
+    {% endif %}
+    <h3 class="subtitle">ویژه</h3>
+    <div class="side-item">
+      {% special_products_sidebar 6 %}
+    </div>
+    {% if request.resolver_match.url_name == "home" %}
+    <div class="list-group">
+      <h3 class="subtitle">محتوای سفارشی</h3>
+      <p>این یک بلاک محتواست. هر نوع محتوایی شامل html، نوشته یا تصویر را میتوانید در آن قرار دهید. </p>
+      <p> در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. </p>
+      <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
+    </div>
+    <div class="banner owl-carousel">
+      <div class="item"> <a href="#"><img src="{% static '/product/image/banner/small-banner1-265x350.jpg' %}" alt="small banner" class="img-responsive" /></a> </div>
+      <div class="item"> <a href="#"><img src="{% static '/product/image/banner/small-banner-265x350.jpg' %}" alt="small banner1" class="img-responsive" /></a> </div>
+    </div>
+    <h3 class="subtitle">جدیدترین</h3>
+    <div class="side-item">
+       {% for product in new_products %}
+        <div class="product-thumb clearfix">
+          <div class="image"><a href="product.html"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
+          <div class="caption">
+            <h4><a href="product.html">{{product.title}}</a></h4>
+            <p class="price"> 
+              {% if product.is_special %}
+                  <span class="price-new">{{product.price}}</span> 
+                  <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+              {% else %}
+                  <span class="price-new">{{product.price}}</span> 
+              {% endif %}
+            </p>
+            <div class="stars-outer">
+              <div class="stars-inner">{{product.ratings.get.average}}</div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </aside>

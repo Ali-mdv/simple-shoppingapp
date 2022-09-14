@@ -1,0 +1,6 @@
+{% for cat in categories %}
+<li>
+    <a href="{% url 'product:category_products' cat.slug %}">{{cat.title}}</a>
+    <span class="{% if cat.children.exists %}down{% endif %}"> </span>
+</li>
+{% endfor %}

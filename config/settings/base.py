@@ -58,6 +58,8 @@ THIRD_PARTY_APPS = [
     'widget_tweaks',
     'django_render_partial',
     'extentions',
+    'crispy_forms',
+    'star_ratings'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -167,3 +169,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

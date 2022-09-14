@@ -1,0 +1,142 @@
+{% load static %}
+{% load cart_tags %}
+{% load base_tags %}
+
+<div id="header">
+    <!-- Top Bar Start-->
+    <nav id="top" class="htop">
+      <div class="container">
+        <div class="row"> <span class="drop-icon visible-sm visible-xs"><i class="fa fa-align-justify"></i></span>
+          <div class="pull-left flip left-top">
+            <div class="links">
+              <ul>
+                <li class="mobile"><i class="fa fa-phone"></i>+21 9898777656</li>
+                <li class="email"><a href="mailto:info@marketshop.com"><i class="fa fa-envelope"></i>info@marketshop.com</a></li>
+                <li class="wrap_custom_block hidden-sm hidden-xs"><a>بلاک سفارشی<b></b></a>
+                  <div class="dropdown-menu custom_block">
+                    <ul>
+                      <li>
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td><img alt="" src="{% static '/product/image/banner/cms-block.jpg' %}"></td>
+                              <td><img alt="" src="{% static '/product/image/banner/responsive.jpg' %}"></td>
+                            </tr>
+                            <tr>
+                              <td><h4>بلاک های محتوا</h4></td>
+                              <td><h4>قالب واکنش گرا</h4></td>
+                            </tr>
+                            <tr>
+                              <td>این یک بلاک مدیریت محتواست. شما میتوانید هر نوع محتوای html نوشتاری یا تصویری را در آن قرار دهید.</td>
+                              <td>این یک بلاک مدیریت محتواست. شما میتوانید هر نوع محتوای html نوشتاری یا تصویری را در آن قرار دهید.</td>
+                            </tr>
+                            <tr>
+                              <td><strong><a class="btn btn-default btn-sm" href="#">ادامه مطلب</a></strong></td>
+                              <td><strong><a class="btn btn-default btn-sm" href="#">ادامه مطلب</a></strong></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li><a href="#">لیست علاقه مندی (0)</a></li>
+                <li><a href="checkout.html">تسویه حساب</a></li>
+              </ul>
+            </div>
+            <div id="language" class="btn-group">
+              <button class="btn-link dropdown-toggle" data-toggle="dropdown"> <span> <img src="{% static '/product/image/flags/gb.png' %}" alt="انگلیسی" title="انگلیسی">انگلیسی <i class="fa fa-caret-down"></i></span></button>
+              <ul class="dropdown-menu">
+                <li>
+                  <button class="btn btn-link btn-block language-select" type="button" name="GB"><img src="{% static '/product/image/flags/gb.png' %}" alt="انگلیسی" title="انگلیسی" /> انگلیسی</button>
+                </li>
+                <li>
+                  <button class="btn btn-link btn-block language-select" type="button" name="GB"><img src="{% static '/product/image/flags/ar.png' %}" alt="عربی" title="عربی" /> عربی</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div id="top-links" class="nav pull-right flip">
+            <ul>
+              {% if request.user.is_authenticated %}
+              <li><a href="{% url 'logout' %}">خروج</a></li>
+              <li><a href="{% url 'users:profile' %}">پروفایل</a></li>
+              {% else %}
+              <li><a href="{% url 'login' %}">ورود</a></li>
+              <li><a href="{% url 'users:signup' %}">ثبت نام</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- Top Bar End-->
+    <!-- Header Start-->
+    <header class="header-row">
+      <div class="container">
+        <div class="table-container">
+          <!-- Logo Start -->
+          <div class="col-table-cell col-lg-6 col-md-6 col-sm-12 col-xs-12 inner">
+            <div id="logo"><a href="{% url 'product:home' %}"><img class="img-responsive" src="{% static '/product/image/logo.png' %}" title="MarketShop" alt="MarketShop" /></a></div>
+          </div>
+          <!-- Logo End -->
+          <!-- Mini Cart Start-->
+          {% if request.user.is_authenticated %}
+            {% detail_cart %}
+          {% endif %}
+          <!-- Mini Cart End-->
+          <!-- جستجو Start-->
+          <div class="col-table-cell col-lg-3 col-md-3 col-sm-6 col-xs-12 inner">
+            <div id="search" class="input-group">
+              <form action="{% url 'product:search_products' %}" method="get">
+                <input id="filter_name" type="text" name="search" value="" placeholder="جستجو" class="form-control input-lg" />
+                <button type="button" class="button-search"><i class="fa fa-search"></i></button>
+              </form>
+            </div>
+          </div>
+          <!-- جستجو End-->
+        </div>
+      </div>
+    </header>
+    <!-- Header End-->
+    <!-- Main آقایانu Start-->
+    <div class="container">
+      <nav id="menu" class="navbar">
+        <div class="navbar-header"> <span class="visible-xs visible-sm"> منو <b></b></span></div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav">
+            <li><a class="home_link" title="خانه" href="{% url 'product:home' %}"><span>خانه</span></a></li>
+            <li class="mega-menu dropdown"><a>دسته ها</a>
+              <div class="dropdown-menu">
+                {% category_header %}
+              </div>
+            </li>
+            <li class="custom-link"><a href="#">لینک های دلخواه</a></li>
+            <li class="dropdown wrap_custom_block hidden-sm hidden-xs"><a>راهنما</a>
+              <div class="dropdown-menu custom_block">
+                <ul>
+                  <li>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td><a href="{% url 'contact:about_us' %}"><img alt="" src="{% static '/product/image/banner/about-us-banner.jpg' %}"></a></td>
+                          <td><a href="{% url 'contact:faq' %}"><img alt="" src="{% static '/product/image/banner/faq-banner.jpg' %}"></a></td>
+                        </tr>
+                        <tr>
+                          <td><a href="{% url 'contact:about_us' %}"><h4>درباره ما</h4></a></td>
+                          <td><a href="{% url 'contact:faq' %}"><h4>سوالات متداول</h4></a></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="contact-link"><a href="{% url 'contact:contact_us' %}">ارتباط با ما</a></li>
+            <li class="custom-link-right"><a href="#" target="_blank"> همین حالا بخرید!</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <!-- Main آقایانu End-->
+</div>

@@ -1,143 +1,254 @@
-{% extends 'product/base.html' %}
+{% extends 'components/_base.html' %}
 {% load static %}
-{% load render_partial %}
+{% load base_tags %}
+{% load crispy_forms_tags %}
+{% load ratings %}
 
-
-{% block sidebar %}
-	{% render_partial 'sidebar_pattern' %}
+{% block title %}
+فروشگاه شهر تاب | {{product.title}}
 {% endblock %}
 
-
 {% block content %}
-<div class="span9">
-	<ul class="breadcrumb">
-		<li><a href="index.html">Home</a> <span class="divider">/</span></li>
-		<li><a href="products.html">Items</a> <span class="divider">/</span></li>
-		<li class="active">Preview</li>
-	</ul>	
-	<div class="well well-small">
-		<div class="row-fluid detail-display">
-			<div class="span5">
-				<div id="myCarousel" class="carousel slide cntr">
-					<div class="carousel-inner">
-						{% for picture in product_gallery %}
-							<div class="item {{forloop.first|yesno:'active,'}}">
-								<a href="#"> <img class='image-gallery' src="{{picture.image.url}}" alt="{{picture.title}}"></a>
-							</div>
-						{% endfor %}
-					</div>
-					<a class="left carousel-control" href="#myCarousel" data-slide="prev">›</a>
-					<a class="right carousel-control" href="#myCarousel" data-slide="next">‹</a>
-				</div>
-			</div>
-			<div class="span7">
-				<h3>{{product.title}}</h3>
-				<hr class="soft"/>
-				<form class="form-horizontal qtyFrm" method='post' action="{% url 'order:add_order' %}">{% csrf_token %}
-					<div class="control-group">
-						{{new_order_form.product_id}}
-						<label class="control-label"><span>قیمت:</span></label>
-						<div class="controls">
-							{{product.price}}
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label"><span>تعداد</span></label>
-						<div class="controls">
-							{{new_order_form.count}}
-						</div>
-					</div>
-					<!-- <div class="control-group">
-						<label class="control-label"><span>رنگ</span></label>
-						<div class="controls">
-							<select class="span11">
-								<option>Red</option>
-								<option>Purple</option>
-								<option>Pink</option>
-								<option>Red</option>
-							</select>
-						</div>
-					</div> -->
-					<h4>100 items in stock</h4>
-					<p>Nowadays the lingerie industry is one of the most successful business spheres.
-					Nowadays the lingerie industry is one of ...
-					<p>
-					<button type="submit" class="shopBtn"><span class=" icon-shopping-cart"></span>افزودن به سبد خرید</button>
-				</form>
-			</div>
-		</div>
-
-		<hr class="softn clr"/>
-
-		<div>
-			<h5 style='font-size:20px;'>تگ ها:
-				{% for tag in product.tag_set.all %}
-					<small>{{tag}} - </small>
-				{% endfor %}
-			</h5>
-			
-		</div>
-
-		<ul id="productDetail" class="nav nav-tabs">
-			<li class="active"><a href="#home" data-toggle="tab">مشخصات محصول</a></li>
-			<li class=""><a href="#text" data-toggle="tab">توضیحات محصول</a></li>
-			<li class=""><a href="#profile" data-toggle="tab">محصولات مشابه</a></li>
-		</ul>
-		<div id="myTabContent" class="tab-content tabWrapper">
-			<div class="tab-pane fade active in" id="home">
-				<table class="table table-striped">
-					<tbody>
-						<tr class="techSpecRow">
-							<th class="techSpecTD1">رنگ:</th>
-							<td class="techSpecTD2">{{product.color}}</td>
-						</tr>
-						<tr class="techSpecRow">
-							<th class="techSpecTD1">مدل:</th>
-							<td class="techSpecTD2">{{product.pattern}}</td>
-						</tr>
-						<tr class="techSpecRow">
-							<th class="techSpecTD1">طرح بافت:</th>
-							<td class="techSpecTD2">{{product.texture}}</td>
-						</tr>
-						<tr class="techSpecRow">
-							<th class="techSpecTD1">Brand:</th>
-							<td class="techSpecTD2">Shock Absorber</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="tab-pane fade" id="text">
-				<div class="row-fluid">	  
-					{{product.description}}
-				</div>
-			</div>
-			<div class="tab-pane fade" id="profile">
-				{% for product in similar_products %}
-					<div class="row-fluid">	  
-						<div class="span2">
-							<img src="{{product.image.url}}" alt="">
-						</div>
-						<div class="span6">
-							<h5>{{product.title}}</h5>
-							<p>{{product.description}}</p>
-						</div>
-						<div class="span4 alignR">
-							<form class="form-horizontal qtyFrm">
-								<h3>{{product.price}}</h3>
-								<label class="checkbox">
-									<input type="checkbox">  Adds product to compair
-								</label><br>
-								<div class="btn-group">
-									<a href="product_details.html" class="defaultBtn"><span class=" icon-shopping-cart"></span> Add to cart</a>
-									<a href="{% url 'product:detail' product.slug %}" class="shopBtn">نمایش محصول</a>
-								</div>
-							</form>
-						</div>
-					</div>
-					<hr class="soft">
-				{% endfor %}
-			</div>
-		</div>
-	</div>
+<div id="container">
+  <div class="container">
+    <!-- Breadcrumb Start-->
+    <ul class="breadcrumb">
+      <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{% url 'product:home' %}" itemprop="url"><span itemprop="title"><i class="fa fa-home"></i></span></a></li>
+      {% for cat in product.category.all %}
+        <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="product.html" itemprop="url"><span itemprop="title">{{cat.title}}</span></a></li>
+      {% endfor %}
+    </ul>
+    <!-- Breadcrumb End-->
+    <div class="row">
+      <!--Middle Part Start-->
+      <div id="content" class="col-sm-9">
+        <div itemscope itemtype="http://schema.org/محصولات">
+          <h1 class="title" itemprop="name">{{ product.title }}</h1>
+          <div class="row product-info">
+            <div class="col-sm-6">
+              <div class="image"><img class="img-responsive" itemprop="image" id="zoom_01" src="{{product.image.url}}" title="{{prduct.title}}" alt="{{prduct.title}}" data-zoom-image="{{product.image.url}}" /> </div>
+              <div class="center-block text-center"><span class="zoom-gallery"><i class="fa fa-search"></i> برای مشاهده گالری روی تصویر کلیک کنید</span></div>
+              <div class="image-additional" id="gallery_01"> 
+                <a class="thumbnail" href="#" data-zoom-image="{{product.image.url}}" data-image="{{product.image.url}}" title="{{product.title}}"><img src="{{product.image.url}}" title="{{product.title}}" alt="{{product.title}}" /></a> 
+                {% for gallery in product_gallery %}
+                  <a class="thumbnail" href="#" data-zoom-image="{{gallery.image.url}}" data-image="{{gallery.image.url}}" title="{{product.title}}"><img src="{{gallery.image.url}}" title="{{product.title}}" alt="{{product.title}}" /></a> 
+                {% endfor %}
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <ul class="list-unstyled description">
+                <li><b>مدل :</b> <a href="#"><span itemprop="brand">{{product.get_model}}</span></a></li>
+                <li><b>بافت :</b> <a href="#"><span itemprop="brand">{{product.get_texture}}</span></a></li>
+                <li><b>کد محصول :</b> <span itemprop="mpn">محصولات 17</span></li>
+                <li><b>وضعیت موجودی :</b> 
+                  <span class="{{ value|yesno:'instock,nostock' }}">{{ value|yesno:'موجود,عدم موجودی' }}</span>
+                </li>
+                <li><b>امتیاز :</b> <span itemprop="mpn">
+                  <div class="stars-outer">
+                    <div class="stars-inner">{{product.ratings.get.average}}</div>
+                  </div>
+                </span></li>
+              </ul>
+              <ul class="price-box">
+                <li class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                  {% if product.is_special %}
+                    <span class="price-old">{{product.price}}</span> 
+                    <span itemprop="price">{{product.get_total_price}}<span itemprop="availability" content="موجود"></span></span>
+                  {% else %}
+                    <span itemprop="price">{{product.price}}<span itemprop="availability" content="موجود"></span></span>
+                  {% endif %}
+                </li>
+              </ul>
+              <div id="product">
+                <h3 class="subtitle">انتخاب های در دسترس</h3>
+                <form action="{% url 'order:add_order' %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="product_id" value="{{product.id}}">
+                  <div class="form-group required">
+                    <label class="control-label">رنگ</label>
+                    <select class="form-control" id="input-option200" name="color" required>
+                      <option value=""> --- لطفا انتخاب کنید --- </option>
+                      {% for color in product.body_color.all %}
+                        <option value="{{color.id}}">{{color.title}} </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="cart">
+                    <div>
+                      <div class="qty">
+                        <label class="control-label" for="input-quantity">تعداد</label>
+                        <input type="text" name="count" value="1" size="2" id="input-quantity" class="form-control" readonly/>
+                        <a class="qtyBtn plus" href="javascript:void(0);">+</a><br />
+                        <a class="qtyBtn mines" href="javascript:void(0);">-</a>
+                        <div class="clear"></div>
+                      </div>
+                      <button type="submit" id="button-cart" class="btn btn-primary btn-lg">افزودن به سبد</button>
+                    </div>
+                  </div>
+                </form>
+                <div class="cart">
+                  <div>
+                    <button type="button" class="wishlist" onClick=""><i class="fa fa-heart"></i> افزودن به علاقه مندی ها</button>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-description" data-toggle="tab">توضیحات</a></li>
+            <li><a href="#tab-specification" data-toggle="tab">مشخصات</a></li>
+            <li><a href="#tab-review" data-toggle="tab">دیدگاه {{product.comments.count}}</a></li>
+            {% if request.user.is_authenticated %}
+            <li><a href="#tab-comment" data-toggle="tab">ثبت نظر</a></li>
+            {% endif %}
+          </ul>
+          <div class="tab-content">
+            <div itemprop="description" id="tab-description" class="tab-pane active">
+              <div>
+                {{product.description}}
+              </div>
+            </div>
+            <div id="tab-specification" class="tab-pane">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <td colspan="2"><strong>مشخصات سبد</strong></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>مدل</td>
+                    <td>{{product.get_model}}</td>
+                  </tr>
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td>بافت</td>
+                    <td>{{product.get_texture}}</td>
+                  </tr>
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td>رنگ های موجود</td>
+                    <td>{{product.color_to_str}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <td colspan="2"><strong>مشخصات کلی</strong></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>طول ستون</td>
+                    <td>۲ متر</td>
+                  </tr>
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td>عرض پایه</td>
+                    <td>۱ متر</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="tab-review" class="tab-pane">
+              <div id="review">
+                <div>
+                  {% for comment in comments %}
+                    <table class="table table-striped table-bordered">
+                      <tbody>
+                        <tr>
+                          <td style="width: 50%;"><strong><span>{{comment.user.username}}</span></strong></td>
+                          <td class="text-right"><span>1395/1/20</span></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2"><p>{{comment.text}}</p>
+                            {% if comment.rating %}
+                            <div class="stars-outer">
+                              <div class="stars-inner">{{comment.rating}}</div>
+                            </div>
+                            {% endif %}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  {% endfor %}
+                </div>
+                <div class="text-right"></div>
+              </div>
+            </div>
+            {% if request.user.is_authenticated %}
+            <div id="tab-comment" class="tab-pane">
+              {% if comment_form.errors %}
+              <div class="alert alert-danger">{{ comment_form.errors }}</div>
+              {% endif %}
+              <div class="form-group required">
+                {% ratings product %}
+              </div>
+              <form method="POST" class="form-horizontal">
+                {% csrf_token %}
+                <div class="form-group required">
+                  <div class="col-sm-12">
+                    <div class="col-sm-12">
+                      {{ comment_form|crispy }}
+                    </div>
+                  </div>
+                </div>
+                <div class="buttons">
+                  <div class="pull-right">
+                    <button class="btn btn-primary" id="button-review">ثبت</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            {% endif %}
+          </div>
+          <h3 class="subtitle">محصولات مرتبط</h3>
+          <div class="owl-carousel related_pro">
+            {% for product in similar_products %}
+              <div class="product-thumb">
+                <div class="image"><a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
+                <div class="caption">
+                  <h4><a href="product.html">{{product.title}}</a></h4>
+                  <p class="price"> <span class="price-new">{{product.price}}</span></p>
+                  <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> </div>
+                </div>
+                <div class="button-group">
+                  <button class="btn-primary" type="button" onClick=""><span>افزودن به سبد</span></button>
+                  <div class="add-to-links">
+                    <button type="button" data-toggle="tooltip" title="افزودن به علاقه مندی" onClick=""><i class="fa fa-heart"></i></button>
+                    <button type="button" data-toggle="tooltip" title="افزودن به مقایسه" onClick=""><i class="fa fa-exchange"></i></button>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <!--Middle Part End -->
+      <!--Right Part Start -->
+      <aside id="column-right" class="col-sm-3 hidden-xs">
+        <h3 class="subtitle">پرفروش ها</h3>
+        <div class="side-item">
+          {% best_seller_products_sidebar 5 %}
+        </div>
+        <div class="list-group">
+          <h3 class="subtitle">محتوای سفارشی</h3>
+          <p>این یک بلاک محتواست. هر نوع محتوایی شامل html، نوشته یا تصویر را میتوانید در آن قرار دهید. </p>
+          <p> در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. </p>
+          <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
+        </div>
+        <h3 class="subtitle">ویژه</h3>
+        <div class="side-item">
+          {% special_products_sidebar 6 %}
+        </div>
+      </aside>
+      <!--Right Part End -->
+    </div>
+  </div>
 </div>
 {% endblock %}

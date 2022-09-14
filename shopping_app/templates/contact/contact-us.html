@@ -1,0 +1,141 @@
+{% extends 'components/_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block title %}
+فروشگاه شهر تاب | ارتباط با ما
+{% endblock %}
+
+{% block content %}
+<div id="container">
+  <div class="container">
+      <!-- Breadcrumb Start-->
+      <ul class="breadcrumb">
+        <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+        <li><a href="{% url 'contact:contact_us' %}">ارتباط با ما</a></li>
+      </ul>
+      <!-- Breadcrumb End-->
+      <div class="row">
+          <!--Middle Part Start-->
+          <div id="content" class="col-sm-9">
+              <h1 class="title">ارتباط با ما</h1>
+              <h3 class="subtitle">محل ما</h3>
+              <div class="row">
+                  <div class="col-sm-3">
+                      <img
+                          src="{% static '/product/image/product/store_location-275x180.jpg' %}"
+                          alt="قالب مارکت شاپ"
+                          title="قالب مارکت شاپ"
+                          class="img-thumbnail"
+                      />
+                  </div>
+                  <div class="col-sm-3">
+                      <strong>قالب مارکت شاپ</strong><br />
+                      <address>
+                          میدان مرکزی،<br />
+                          خیابان وینگ شماره 22،<br />
+                          نیویورک،<br />
+                          ایالات متحده
+                      </address>
+                  </div>
+                  <div class="col-sm-3">
+                      <strong>شماره تلفن</strong><br />
+                      +91 9898989898<br />
+                      <br />
+                      <strong>فکس</strong><br />
+                      +91 9898989898
+                  </div>
+                  <div class="col-sm-3">
+                      <strong>ساعات کار</strong><br />
+                      خدمات مشتریان 24x7<br />
+                      <br />
+                      <strong>دیدگاه ها</strong><br />
+                      در اینجا توضیحات دلخواه خود را قرار دهید. فروشگاه چک
+                      قبول نمیکند!
+                  </div>
+              </div>
+              <form class="form-horizontal" method="post">{% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="non-field-errors alert alert-danger" style='direction:rtl;'>
+                    {% for err in form.non_field_errors %}
+                        <p class="text-error" style='color:red;'>{{ err }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <fieldset id="contact-us">
+                  <h3 class="subtitle">با ما ارتباط برقرار کنید</h3>
+                  {% for field in contact_form %}
+                  <div class="form-group required">
+                    <label class="col-sm-2 control-label" for="{{field.id_for_label}}">{{field.label}}</label>
+                    <div class="col-sm-10">
+                      {{field|add_class:"form-control"}}
+                      {% if field.help_text %}
+                        <small class="fw-lighter">{{ field.help_text }}</small>
+                      {% endif %}
+                      {% if field.errors %}
+                        <div class="alert alert-danger">
+                          <ul>
+                            {% for error in field.errors %}
+                              <li>{{error}}</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% endfor %}
+                </fieldset>
+                <div class="buttons">
+                  <div class="pull-right">
+                    <input type="checkbox" value="1" name="agree" required>
+                    &nbsp;صحت اطلاعات وارد شده&nbsp;
+                    <input type="submit" class="btn btn-primary" value="ارسال">
+                  </div>
+                </div>
+            </form>
+          </div>
+          <aside id="column-right" class="col-sm-3 hidden-xs">
+              <div class="list-group">
+                  <h2 class="subtitle">محتوای سفارشی</h2>
+                  <p>
+                      این یک بلاک محتواست. هر نوع محتوایی شامل html، نوشته یا
+                      تصویر را میتوانید در آن قرار دهید.
+                  </p>
+                  <p>
+                      در این صورت می توان امید داشت که تمام و دشواری موجود در
+                      ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد
+                      نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات
+                      پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار
+                      گیرد.
+                  </p>
+                  <p>
+                      لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت
+                      چاپ و با استفاده از طراحان گرافیک است.
+                  </p>
+              </div>
+              <div class="banner owl-carousel">
+                  <div class="item">
+                      <a href="#"
+                          ><img
+                              src="{% static '/product/image/banner/small-banner1-265x350.jpg' %}"
+                              alt="small banner"
+                              class="img-responsive"
+                      /></a>
+                  </div>
+                  <div class="item">
+                      <a href="#"
+                          ><img
+                              src="{% static '/product/image/banner/small-banner-265x350.jpg' %}"
+                              alt="small banner1"
+                              class="img-responsive"
+                      /></a>
+                  </div>
+              </div>
+          </aside>
+          <!--Middle Part End -->
+      </div>
+  </div>
+</div>
+{% endblock content %}
+

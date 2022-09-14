@@ -1,17 +1,17 @@
 from django.http.response import Http404
 from django.shortcuts import render, redirect
-from .forms import NewOrderFrom
-from .models import Order , OrderDetail
-from product.models import Product
 from django.contrib.auth.decorators import login_required
+from .forms import NewOrderFrom
+from .models import Order, OrderDetail
+from product.models import Product
 
 from django.http import HttpResponse
-from django.shortcuts import redirect
 import requests
 import json
 
 from datetime import datetime
 # Create your views here.
+
 
 @login_required
 def add_order(request):
@@ -19,54 +19,56 @@ def add_order(request):
 
     if new_order_form.is_valid():
         try:
-            order = Order.objects.get(owner_id=request.user.id,is_paid=False)
+            order = Order.objects.get(owner_id=request.user.id, is_paid=False)
         except:
-            order = Order.objects.create(owner_id=request.user.id,is_paid=False)
+            order = Order.objects.create(
+                owner_id=request.user.id, is_paid=False)
 
         product_id = new_order_form.cleaned_data.get('product_id')
         count = new_order_form.cleaned_data.get('count')
         product = Product.objects.get(id=product_id)
 
-
         if count < 0:
             count = 1
 
-        order.orderdetail_set.create(product_id=product.id,price=product.price,count=count)
-    
-    return redirect('product:detail',slug=product.slug)
-    
+        order.orderdetail_set.create(
+            product_id=product.id, price=product.price, count=count)
+        print(order.orderdetail_set.all())
+    return redirect('product:detail', slug=product.slug)
+
 
 @login_required
 def detail_cart(request):
     try:
-        order = Order.objects.get(owner_id=request.user.id,is_paid=False)
+        order = Order.objects.get(owner_id=request.user.id, is_paid=False)
     except:
-        order = Order.objects.create(owner_id=request.user.id,is_paid=False)
-        
-    details_order = order.orderdetail_set.filter(order__owner=request.user,order__is_paid=False)
+        order = Order.objects.create(owner_id=request.user.id, is_paid=False)
 
-    context={
-        'details_order' :details_order,
+    details_orders = order.orderdetail_set.filter(
+        order__owner=request.user, order__is_paid=False)
+
+    context = {
+        'details_orders': details_orders,
         'total': order.total_price_order,
     }
 
-    return render(request,'product/cart.html',context)
+    return render(request, 'product/cart.html', context)
 
 
 @login_required
-def delete_item_order(request,item_id):
+def delete_item_order(request, item_id):
+    next = request.GET.get("next")
     try:
-        # order_detail = OrderDetail.objects.get_queryset().get(id=item_id,order__owner_id=request.user.id)
-        order_detail = request.user.order_set.get(orderdetail__id=item_id)
+        # order = request.user.order_set.get(orderdetail__id=item_id)
+        order_detail = OrderDetail.objects.get(
+            id=item_id, order__owner_id=request.user.id)
 
         if order_detail is not None:
             order_detail.delete()
     except:
         raise Http404('چنین محصولی در سبد خرید شما وجود ندارد.')
 
-    return redirect('order:cart')
-
-
+    return redirect(f'order:cart')
 
 
 MERCHANT = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
@@ -79,10 +81,11 @@ description = "توضیحات مربوط به تراکنش را در این قس
 # Important: need to edit for realy server.
 CallbackURL = 'http://localhost:8000/verify'
 
+
 @login_required
-def send_request(request,*args,**kwags):
+def send_request(request, *args, **kwags):
     try:
-        order = Order.objects.get(owner_id=request.user.id,is_paid=False)
+        order = Order.objects.get(owner_id=request.user.id, is_paid=False)
     except:
         raise Http404()
 
@@ -98,7 +101,7 @@ def send_request(request,*args,**kwags):
         "metadata": {"mobile": mobile, "email": email}
     }
     req_header = {"accept": "application/json",
-                "content-type": "application/json'"}
+                  "content-type": "application/json'"}
     req = requests.post(url=ZP_API_REQUEST, data=json.dumps(
         req_data), headers=req_header)
     authority = req.json()['data']['authority']
@@ -110,8 +113,7 @@ def send_request(request,*args,**kwags):
         return HttpResponse(f"Error code: {e_code}, Error Message: {e_message}")
 
 
-
-def verify(request,*args,**kwags):
+def verify(request, *args, **kwags):
     order_id = kwags.get('order_id')
 
     t_status = request.GET.get('Status')
@@ -124,7 +126,8 @@ def verify(request,*args,**kwags):
             "amount": amount,
             "authority": t_authority
         }
-        req = requests.post(url=ZP_API_VERIFY, data=json.dumps(req_data), headers=req_header)
+        req = requests.post(url=ZP_API_VERIFY, data=json.dumps(
+            req_data), headers=req_header)
         if len(req.json()['errors']) == 0:
             t_status = req.json()['data']['code']
             if t_status == 100:

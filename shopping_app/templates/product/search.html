@@ -1,0 +1,150 @@
+{% extends 'components/_base.html' %}
+
+
+{% block title %}
+{% endblock title %}
+
+
+{% block content %}
+  <div id="container">
+    <div class="container">
+      <!-- Breadcrumb Start-->
+      <ul class="breadcrumb">
+        <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+        <li><a href="{% url 'product:search_products' %}?search={{search}}&sort={{sorted_by}}">جستجو</a></li>
+      </ul>
+      <!-- Breadcrumb End-->
+      <div class="row">
+        <!--Middle Part Start-->
+        <div id="content" class="col-sm-12">
+          <h1 class="title">جستجو - {{search}}</h1>
+          <label>شاخص جستجو</label>
+          <form id="form-query" action="{% url 'product:search_products' %}" method="get">
+            <div class="row">
+              <div class="col-sm-4">
+                <input type="text" class="form-control" placeholder="جستجو" value="{{search}}" name="search">
+              </div>
+              <!-- <div class="col-sm-3">
+                <select class="form-control" name="category">
+                  <option value="0">همه دسته ها</option>
+                  <option value="59">البسه</option>
+                  <option value="61">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;آقایان</option>
+                  <option value="93">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;زیردسته ها</option>
+                  <option value="94">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;زیردسته ها</option>
+                  <option value="95">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;زیردسته ها</option>
+                  <option value="96">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;زیردسته ها</option>
+                </select>
+              </div> -->
+              <div class="col-sm-3">
+                <button type="submit" class="btn btn-primary" id="button-search">جستجو</button>
+              </div>
+            </div>
+            <br>
+            <div class="product-filter">
+              <div class="row">
+                <div class="col-md-4 col-sm-5">
+                  <div class="btn-group">
+                    <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="List"><i class="fa fa-th-list"></i></button>
+                    <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="Grid"><i class="fa fa-th"></i></button>
+                  </div>
+                  <a href="compare.html" id="compare-total">محصولات مقایسه (0)</a> </div>
+                <div class="col-sm-2 text-right">
+                  <label class="control-label" for="input-sort">مرتب سازی :</label>
+                </div>
+                <div class="col-md-3 col-sm-2 text-right">
+                  <select id="input-sort" name="sort" class="form-control col-sm-10">
+                    <option value="" {% if sorted_by == 'created' %}selected="selected"{% endif %}>پیشفرض</option>
+                    <option value="price" {% if sorted_by == 'price' %}selected="selected"{% endif %}>قیمت (کم به زیاد)</option></option>
+                    <option value="-price" {% if sorted_by == '-price' %}selected="selected"{% endif %}>قیمت (زیاد به کم)</option>
+                    <option value="-ratings" {% if sorted_by == '-ratings' %}selected="selected"{% endif %}>امتیاز (بیشترین)</option>
+                    <option value="ratings" {% if sorted_by == 'ratings' %}selected="selected"{% endif %}>امتیاز (کمترین)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+          <br />
+          <div class="row products-category">
+            {% for product in products %}
+            <div class="product-layout product-list col-xs-12">
+              <div class="product-thumb">
+                <div class="image"><a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt=" {{product.title}}" title=" {{product.title}}" class="img-responsive" /></a></div>
+                <div>
+                  <div class="caption">
+                    <h4><a href="{% url 'product:detail' product.slug %}"> {{product.title}}</a></h4>
+                    <p class="price"> 
+                      {% if product.is_special %}
+                          <span class="price-new">{{product.price}}</span> 
+                          <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+                      {% else %}
+                          <span class="price-new">{{product.price}}</span> 
+                      {% endif %}
+                    </p>
+                    <div class="stars-outer">
+                      <div class="stars-inner">{{product.ratings.get.average}}</div>
+                    </div>
+                  </div>
+                  <div class="button-group">
+                    <button class="btn-primary" type="button" onClick=""><span>افزودن به سبد</span></button>
+                    <div class="add-to-links">
+                      <button type="button" data-toggle="tooltip" title="افزودن به علاقه مندی ها" onClick=""><i class="fa fa-heart"></i> <span>افزودن به علاقه مندی ها</span></button>
+                      <button type="button" data-toggle="tooltip" title="مقایسه این محصول" onClick=""><i class="fa fa-exchange"></i> <span>مقایسه این محصول</span></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="row">
+            <div class="col-sm-6 text-left">
+              <ul class="pagination">
+                {% if products.has_previous %}
+                <li>
+                  <a href="{% url 'product:search_products' %}{% if search %}?search={{search}}{% endif %}{% if sorted_by %}&sort={{sorted_by}}{% endif %}">
+                    &lt;|</a>
+                  </li>
+                <li>
+                  <a href="{% url 'product:search_products' products.number|add:'-1' %}{% if search %}?search={{search}}{% endif %}{% if sorted_by %}&sort={{sorted_by}}{% endif %}">
+                    {{products.number|add:"-1"}}</a>
+                  </li>
+                {% endif %}
+                <li class="active"><span>{{products.number}}</span></li>
+                {% if products.has_next %}
+                <li>
+                  <a href="{% url 'product:search_products' products.number|add:'1' %}{% if search %}?search={{search}}{% endif %}{% if sorted_by %}&sort={{sorted_by}}{% endif %}">
+                    {{products.number|add:"1"}}</a>
+                  </li>
+                <li>
+                  <a href="{% url 'product:search_products' products.paginator.num_pages %}{% if search %}?search={{search}}{% endif %}{% if sorted_by %}&sort={{sorted_by}}{% endif %}">
+                    &gt;|</a>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="col-sm-6 text-right">نمایش {{products.start_index}} تا {{products.end_index}} از {{products.paginator.count}} (مجموع {{products.paginator.num_pages}} صفحه)</div>
+          </div>
+        </div>
+        <!--Middle Part End -->
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+
+{% block javascript %}
+<script>
+  let sendButton = document.getElementById("form-query");
+
+  $("#input-sort").change(function(e){
+    e.preventDefault();
+    $.ajax({
+      type: "GET",
+      url: "{% url 'product:search_products' %}",
+      data: { sort: e.target.value, search: "{{search}}"}
+    })
+    console.log({ sort: e.target.value, search: "{{search}}"})
+    sendButton.submit();
+  })
+</script>
+{% endblock javascript %}

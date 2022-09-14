@@ -1,141 +1,233 @@
-{% extends 'product/base.html' %}
+{% extends 'components/_base.html' %}
 {% load static %}
-{% load render_partial %}
 
 
-{% block sidebar %}
-	{% render_partial 'sidebar_pattern' %}
+{% block title %}
+فروشگاه شهر تاب
 {% endblock %}
 
 {% block content %}
-	<div class="span9">
-		<div class="well np">
-			<div id="myCarousel" class="carousel slide homCar">
-				<div class="carousel-inner">
-					{% for item in slider_items %}
-						<div class="item {{forloop.first|yesno:'active,'}}">
-							<a target='_blank' href="{{item.link}}"><img style="width:100%" src="{{item.image.url}}" alt="bootstrap ecommerce templates"></a>
-							<div class="carousel-caption">
-								<h4 style="float: rightd;">{{item.title}}</h4>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
-				<a class="left carousel-control" href="#myCarousel" data-slide="prev">&rsaquo;</a>
-				<a class="right carousel-control" href="#myCarousel" data-slide="next">&lsaquo;</a>
-			</div>
-		</div>
-<!--
-New Products
--->
-		<div class="well well-small">
-			<h3>محصولات جدید</h3>
-			<hr class="soften"/>
-			<div class="row-fluid">
-				<div id="newProductCar" class="carousel slide">
-					<div class="carousel-inner">
-						{% for group in new_products_grouper %}
-							<div class="item {{forloop.first|yesno:'active,'}}">
-								<ul class="thumbnails">
-									{% for product in group %}
-										<li class="span3">
-											<div class="thumbnail">
-												<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart"><span class="icon-search"></span> مشاهده</a>
-												<a href="{% url 'product:detail' product.slug %}">
-													<img src="{{product.image.url}}" alt="bootstrap-ring">
-												</a>
-											</div>
-										</li>
-									{% endfor %}
-								</ul>
-							</div>
-						{% endfor %}
-		   			</div>
-					<a class="right carousel-control right-slider-new-product" href="#newProductCar" data-slide="prev">&rsaquo;</a>
-					<a class="left carousel-control left-slider-new-product" href="#newProductCar" data-slide="next">&lsaquo;</a>
-		  		</div>
-			</div>
-			<div class="row-fluid">
-				<ul class="thumbnails">
-					{% for product in random_choices %}
-						<li class="span4">
-							<div class="thumbnail">
-								<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart">
-									<span class="icon-search"></span> مشاهده
-								</a>
-								<a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt=""></a>
-								<div class="caption cntr">
-									<p>{{product.title}}</p>
-									<p><strong>{{product.price}}</strong></p>
-									<h4><a class="shopBtn" href="#" title="add to cart"> Add to cart </a></h4>
-									<br class="clr">
-								</div>
-							</div>
-						</li>
-					{% endfor %}
-				</ul>
-			</div>
-		</div>
-	<!--
-	Featured Products
-	-->
-		<div class="well well-small">
-			<h3>
-				<a class="btn btn-mini pull-right" href="{% url 'product:special_products' %}" title="View more">VIew More
-					<span class="icon-plus"></span>
-				</a>محصولات ویژه
-			</h3>
-			<hr class="soften"/>
-			<div class="row-fluid">
-				<ul class="thumbnails">
-					{% for product in special_products %}
-						<li class="span4">
-							<div class="thumbnail">
-								<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart">
-									<span class="icon-search"></span> مشاهده
-								</a>
-								<a  href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt=""></a>
-								<div class="caption">
-									<h5>{{product.title}}</h5>
-<!-- 									<h4>
-										<span class="pull-left"><small>{{product.price}}</small></span>
-									</h4> -->
-								</div>
-							</div>
-						</li>
-					{% endfor %}
-				</ul>	
-			</div>
-		</div>
-	
-		<div class="well well-small">
-			<h3><a class="btn btn-mini pull-right" href="{% url 'product:popular_products' %}" title="View more">VIew More<span class="icon-plus"></span></a>محصولات پر بازدید</h3>
-			<hr class="soften"/>
-			<div class="row-fluid">
-				<ul class="thumbnails">
-					{% for product in popular_products %}
-						<li class="span4">
-							<div class="thumbnail">
-								<a class="zoomTool" href="{% url 'product:detail' product.slug %}" title="add to cart"><span class="icon-search"></span> مشاهده</a>
-								<a  href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt=""></a>
-								<div class="caption">
-									<h5>{{product.title}}</h5>
-<!-- 									<h4>
-										<span class="pull-left"><small>{{product.price}}</small></span>
-									</h4> -->
-								</div>
-							</div>
-						</li>
-					{% endfor %}
-				</ul>	
-			</div>
-		</div>
+<div id="container">
+  <!-- Feature Box Start-->
+  <div class="container">
+    <div class="custom-feature-box row">
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="feature-box fbox_1">
+          <div class="title">ارسال رایگان</div>
+          <p>برای خرید های بیش از 100 هزار تومان</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="feature-box fbox_2">
+          <div class="title">پس فرستادن رایگان</div>
+          <p>بازگشت کالا تا 24 ساعت پس از خرید</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="feature-box fbox_3">
+          <div class="title">کارت هدیه</div>
+          <p>بهترین هدیه برای عزیزان شما</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="feature-box fbox_4">
+          <div class="title">امتیازات خرید</div>
+          <p>از هر خرید امتیاز کسب کرده و از آن بهره بگیرید</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Feature Box End-->
+  <div class="container">
+    <div class="row">
+      <!-- Left Part Start-->
+      {% include "components/aside.html" %}
+      <!-- Left Part End-->
+      <!--Middle Part Start-->
+      <div id="content" class="col-sm-9">
+        <!-- Slideshow Start-->
+        <div class="slideshow single-slider owl-carousel">
+          {% for slide in slider_items %}
+          <div class="item"> 
+            <a href="#">
+              <img class="img-responsive" src="{{slide.image.url}}" alt="{{slide.title}}" />
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+        <!-- Slideshow End-->
+        <!-- Featured محصولات Start-->
+        <h3 class="subtitle"></h3>
+        <div class="owl-carousel product_carousel">
+          {% for product in random_choices %}
+            <div class="product-thumb clearfix">
+              <div class="image">
+                <a href="{% url 'product:detail' product.slug %}">
+                  <img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" />
+                </a>
+              </div>
+              <div class="caption">
+                <h4><a href="{% url 'product:detail' product.slug %}">{{product.title}}</a></h4>
+                <p class="price"> 
+                  {% if product.is_special %}
+                      <span class="price-new">{{product.price}}</span> 
+                      <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+                  {% else %}
+                      <span class="price-new">{{product.price}}</span> 
+                  {% endif %}
+                </p>
+                <div class="stars-outer">
+                  <div class="stars-inner">{{product.ratings.get.average}}</div>
+                </div>
+              </div>
+              <div class="button-group">
+                <button class="btn-primary" type="button" onClick="cart.add('42');"><span>افزودن به سبد</span></button>
+                <div class="add-to-links">
+                  <button type="button" data-toggle="tooltip" title="افزودن به علاقه مندی" onClick=""><i class="fa fa-heart"></i></button>
+                  <button type="button" data-toggle="tooltip" title="مقایسه محصول" onClick=""><i class="fa fa-exchange"></i></button>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <!-- Featured محصولات End-->
+        <!-- Banner Start-->
+        <div class="marketshop-banner">
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"><a href="#"><img src="{% static '/product/image/banner/sample-banner-3-400x200.jpg' %}" alt="بنر نمونه 3" title="بنر نمونه 3" /></a></div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"><a href="#"><img src="{% static '/product/image/banner/sample-banner-1-400x200.jpg' %}" alt="بنر نمونه" title="بنر نمونه" /></a></div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"><a href="#"><img src="{% static '/product/image/banner/sample-banner-2-400x200.jpg' %}" alt="بنر نمونه 2" title="بنر نمونه 2" /></a></div>
+          </div>
+        </div>
+        <!-- Banner End-->
+        <!-- دسته ها محصولات Slider Start-->
+        <div class="category-module" id="latest_category">
+          <h3 class="subtitle">محصولات - <a class="viewall" href="category.tpl">نمایش همه</a></h3>
+          <div class="category-module-content">
+            <ul id="sub-cat" class="tabs">
+              {% for cat in categories %}
+              <li><a href="#{{cat.slug}}">{{cat.title}}</a></li>
+              {% endfor %}
+            </ul>
+            {% for cat in categories %}
+            <div id="{{cat.slug}}" class="tab_content">
+                <div class="owl-carousel latest_category_tabs">
+                  {% for product in cat.product_set.all|slice:":10" %}
+                    <div class="product-thumb">
+                      <div class="image"><a href="product.html"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
+                      <div class="caption">
+                        <h4><a href="product.html">{{product.title}}</a></h4>
+                        <p class="price"> 
+                          {% if product.is_special %}
+                              <span class="price-new">{{product.price}}</span> 
+                              <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+                          {% else %}
+                              <span class="price-new">{{product.price}}</span> 
+                          {% endif %}
+                        </p>
+                        <div class="stars-outer">
+                          <div class="stars-inner">{{product.ratings.get.average}}</div>
+                        </div>
+                      </div>
+                      <div class="button-group">
+                        <button class="btn-primary" type="button" onClick=""><span>افزودن به سبد</span></button>
+                        <div class="add-to-links">
+                          <button type="button" data-toggle="tooltip" title="افزودن به علاقه مندی" onClick=""><i class="fa fa-heart"></i></button>
+                          <button type="button" data-toggle="tooltip" title="افزودن به مقایسه" onClick=""><i class="fa fa-exchange"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
 
-
-		<hr>
-		<div class="well well-small">
-			<a class="btn btn-mini pull-right" href="#">View more <span class="icon-plus"></span></a>
-			محصولات پر فروش 
-		</div>
-	</div>
-{% endblock %}
+          </div>
+        </div>
+        <!-- دسته ها محصولات Slider End-->
+        <!-- Banner Start -->
+        <div class="marketshop-banner">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"><a href="#"><img src="{% static '/product/image/banner/sample-banner-4-400x150.jpg' %}" alt="2 Block Banner" title="2 Block Banner" /></a></div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"><a href="#"><img src="{% static '/product/image/banner/sample-banner-5-400x150.jpg' %}" alt="2 Block Banner 1" title="2 Block Banner 1" /></a></div>
+          </div>
+        </div>
+        <!-- Banner End -->
+        <!-- دسته ها محصولات Slider Start -->
+        <h3 class="subtitle">محصولات منتخب - <a class="viewall" href="category.html">نمایش همه</a></h3>
+        <div class="owl-carousel latest_category_carousel">
+          {% for product in top_rated_products %}
+          <div class="product-thumb">
+            <div class="image"><a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
+            <div class="caption">
+              <h4><a href="{% url 'product:detail' product.slug %}">{{product.title}}</a></h4>
+              <p class="price"> 
+                {% if product.is_special %}
+                    <span class="price-new">{{product.price}}</span> 
+                    <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+                {% else %}
+                    <span class="price-new">{{product.price}}</span> 
+                {% endif %}
+              </p>
+              <div class="stars-outer">
+                <div class="stars-inner">{{product.ratings.get.average}}</div>
+              </div>
+            </div>
+            <div class="button-group">
+              <button class="btn-primary" type="button" onClick=""><span>افزودن به سبد</span></button>
+              <div class="add-to-links">
+                <button type="button" data-toggle="tooltip" title="افزودن به علاقه مندی" onClick=""><i class="fa fa-heart"></i></button>
+                <button type="button" data-toggle="tooltip" title="افزودن به مقایسه" onClick=""><i class="fa fa-exchange"></i></button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <!-- دسته ها محصولات Slider End -->
+        <!-- Brand محصولات Slider Start-->
+        <h3 class="subtitle">محصولات پرفروش- <a class="viewall" href="category.html">نمایش همه</a></h3>
+        <div class="owl-carousel latest_brands_carousel">
+          {% for product in best_seller_products %}
+            <div class="product-thumb">
+              <div class="image"><a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
+              <div class="caption">
+                <h4><a href="{% url 'product:detail' product.slug %}">{{product.title}}</a></h4>
+                <p class="price"> 
+                  {% if product.is_special %}
+                      <span class="price-new">{{product.price}}</span> 
+                      <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+                  {% else %}
+                      <span class="price-new">{{product.price}}</span> 
+                  {% endif %}
+                </p>
+                <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> </div>
+              </div>
+              <div class="button-group">
+                <button class="btn-primary" type="button" onClick=""><span>افزودن به سبد</span></button>
+                <div class="add-to-links">
+                  <button type="button" data-toggle="tooltip" title="افزودن به علاقه مندی" onClick=""><i class="fa fa-heart"></i></button>
+                  <button type="button" data-toggle="tooltip" title="افزودن به مقایسه" onClick=""><i class="fa fa-exchange"></i></button>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <!-- Brand محصولات Slider End -->
+        <!-- Brand Logo Carousel Start-->
+        <div id="carousel" class="owl-carousel nxt">
+          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/apple_logo-100x100.jpg' %}" alt="پالم" class="img-responsive" /></a> </div>
+          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/canon_logo-100x100.jpg' %}" alt="سونی" class="img-responsive" /></a> </div>
+          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/apple_logo-100x100.jpg' %}" alt="کنون" class="img-responsive" /></a> </div>
+          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/canon_logo-100x100.jpg' %}" alt="اپل" class="img-responsive" /></a> </div>
+          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/apple_logo-100x100.jpg' %}" alt="اچ تی سی" class="img-responsive" /></a> </div>
+          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/canon_logo-100x100.jpg' %}" alt="اچ پی" class="img-responsive" /></a> </div>
+          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/apple_logo-100x100.jpg' %}" alt="brand" class="img-responsive" /></a> </div>
+          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/canon_logo-100x100.jpg' %}" alt="brand1" class="img-responsive" /></a> </div>
+        </div>
+        <!-- Brand Logo Carousel End -->
+      </div>
+      <!--Middle Part End-->
+    </div>
+  </div>
+</div>
+{% endblock content %}

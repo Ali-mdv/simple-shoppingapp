@@ -1,82 +1,76 @@
-{% extends 'product/base.html' %}
+{% extends 'components/_base.html' %}
 {% load widget_tweaks %}
-{% load render_partial %}
 
 
-{% block sidebar %}
-	{% render_partial 'sidebar_pattern' %}
-{% endblock %}
+{% block title %}
+فروشگاه شهر تاب | ورود
+{% endblock title %}
+
 
 
 {% block content %}
-<div class="span9">
-	<h3> Login</h3>	
-	<hr class="soft"/>
-	<div class="row">
-		<div class="span4">
-			<div class="well">
-			<h5>CREATE YOUR ACCOUNT</h5><br/>
-			Enter your e-mail address to create an account.<br/><br/><br/>
-				<form>
-					<div class="control-group">
-						<label class="control-label" for="inputEmail">E-mail address</label>
-						<div class="controls">
-							<input class="span3"  type="text" placeholder="Email">
-						</div>
-					</div>
-					<div class="controls">
-						<button type="submit" class="btn block">Create Your Account</button>
-					</div>
-				</form>
-			</div>
-		</div>
-		<div class="span1"> &nbsp;</div>
-		<div class="span4">
-			<div class="well">
-				{% if form.non_field_errors %}
-				<div class="non-field-errors alert alert-danger" style='direction:rtl;'>
-					{% for err in form.non_field_errors %}
-					  <p class="text-error" style='color:red;'>{{ err }}</p>
-					{% endfor %}
-				  </div>
-				{% endif %}
-				<!-- <h5>ALREADY REGISTERED ?</h5> -->
-				<form method="post">{% csrf_token %}
-					<div class="control-group">
-						<label class="control-label" for="{{form.username.id_for_label}}">Username</label>
-						<div class="controls">
-							{{form.username|add_class:"span3"}}
-						</div>
-						{% if form.username.errors %}
-							<div class="errors">
-								{% for error in form.username.errors %}
-									<span>{{error}}</span>
-								{% endfor %}
-                            </div>
-                        {% endif %}
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="{{form.password.id_for_label}}">Password</label>
-						<div class="controls">
-							{{form.password|add_class:"span3"}}
-						</div>
-						{% if form.password.errors %}
-						<div class="errors">
-							{% for error in form.password.errors %}
-								<span>{{error}}</span>
-							{% endfor %}
-						</div>
-					{% endif %}
-					</div>
-					<div class="control-group">
-						<div class="controls">
-							<button type="submit" class="defaultBtn">ورود</button>
-							<a href="{% url 'password_reset' %}" class="defaultBtn btnForget">فراموشی رمز عبور</a>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>	
+<div id="container">
+  <div class="container">
+    <!-- Breadcrumb Start-->
+    <ul class="breadcrumb">
+      <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+      <li><a href="login.html">حساب کاربری</a></li>
+      <li><a href="{% url 'login' %}">ورود</a></li>
+    </ul>
+    <!-- Breadcrumb End-->
+    <div class="row">
+      <!--Middle Part Start-->
+      <div id="content" class="col-sm-9">
+        <div class="row">
+          <div class="col-sm-6">
+            <h2 class="subtitle">مشتری جدید</h2>
+            <p><strong>ثبت نام حساب کاربری</strong></p>
+            <p>با ایجاد حساب کاربری میتوانید سریعتر خرید کرده، از وضعیت خرید خود آگاه شده و تاریخچه ی سفارشات خود را مشاهده کنید.</p>
+            <a href="{% url 'users:signup' %}" class="btn btn-primary">ادامه</a> </div>
+          <div class="col-sm-6">
+            <h2 class="subtitle">مشتری قبلی</h2>
+            <form action="" method="POST">{% csrf_token %}
+              {% if form.non_field_errors %}
+              <div class="non-field-errors alert alert-danger" style='direction:rtl;'>
+                  {% for err in form.non_field_errors %}
+                      <p class="text-error" style='color:red;'>{{ err }}</p>
+                  {% endfor %}
+              </div>
+              {% endif %}
+              <div class="form-group">
+                <label class="control-label" for="{{form.username.id_for_label}}">آدرس ایمیل</label>
+                {{form.username|add_class:"form-control"}}
+              </div>
+              {% if form.username.errors %}
+                <div class="errors">
+                  {% for error in form.username.errors %}
+                    <span class="text-error">{{error}}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              <div class="form-group">
+                <label class="control-label" for="{{form.password.id_for_label}}">رمز عبور</label>
+                {{form.password|add_class:"form-control"}}
+                <br />
+                {% if form.password.errors %}
+                  <div class="errors">
+                    {% for error in form.password.errors %}
+                      <span class="text-danger">{{error}}</span>
+                    {% endfor %}
+                  </div>
+						    {% endif %}
+                <a href="{% url 'password_reset' %}">فراموشی رمز عبور</a></div>
+              <input type="submit" value="ورود" class="btn btn-primary" />
+            </form>
+          </div>
+        </div>
+      </div>
+      <!--Middle Part End -->
+      <!--Right Part Start -->
+      {% include 'registration/components/aside.html' %}
+      <!--Right Part End -->
+    </div>
+  </div>
 </div>
-{% endblock %}
+
+{% endblock content %}

@@ -1,37 +1,73 @@
-{% extends 'product/base.html' %}
+{% extends 'components/_base.html' %}
+{% load widget_tweaks %}
 
 
+{% block title %}
+فروشگاه شهر تاب | پروفایل کاربری
+{% endblock title %}
 
 {% block content %}
-<div class="span9">
-	<h3> Profile</h3>	
-	<hr class="soft"/>
-	<div class="well">
-		<form class="form-horizontal" method="post">{% csrf_token %}
-			<h3>اطلاعات کاربری</h3>
+<div id="container">
+  <div class="container">
+    <!-- Breadcrumb Start-->
+    <ul class="breadcrumb">
+      <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+      <li><a href="{% url 'login' %}">حساب کاربری</a></li>
+      <li><a href="{% url 'users:signup' %}">پروفایل کاربری</a></li>
+    </ul>
+    <!-- Breadcrumb End-->
+    <div class="row">
+      <!--Middle Part Start-->
+      <div class="col-sm-9" id="content">
+        <h1 class="title">پروفایل کاربری</h1>
+        <form class="form-horizontal" method="post">{% csrf_token %}
+          {% if form.non_field_errors %}
+          <div class="non-field-errors alert alert-danger" style='direction:rtl;'>
+              {% for err in form.non_field_errors %}
+                  <p class="text-error" style='color:red;'>{{ err }}</p>
+              {% endfor %}
+          </div>
+          {% endif %}
+          <fieldset id="account">
+            <legend>اطلاعات کاربری</legend>
             {% for field in form %}
-                <div class="control-group">
-                    <label class="control-label" for="{{field.id_for_label}}">{{field.label}}<sup>*</sup></label>
-                    <div class="controls">
-                        {{field}}
-                        {% if field.errors %}
-                            <div class="alert alert-danger">
-                                <ul>
-                                    {% for error in field.errors %}
-                                        <li>{{error}}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-					    {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-            <div class="controls">
-                <input type="submit" name="submitAccount" value="ذخیره" class="exclusive shopBtn">
-                <a href="{% url 'password_change' %}" class="exclusive shopBtn btnForget">تغییر رمز کاربری</a>
+            <div class="form-group required">
+              <label class="col-sm-2 control-label" for="{{field.id_for_label}}">{{field.label}}</label>
+              <div class="col-sm-10">
+                {{field|add_class:"form-control"}}
+                {% if field.help_text %}
+                  <small class="fw-lighter">{{ field.help_text }}</small>
+                {% endif %}
+                {% if field.errors %}
+                  <div class="alert alert-danger">
+                    <ul>
+                      {% for error in field.errors %}
+                        <li>{{error}}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
+              </div>
             </div>
-
-		</form>
-	</div>
+            {% endfor %}
+          </fieldset>
+          <div class="buttons">
+            <div class="pull-right">
+              <input type="checkbox" value="1" name="agree" required>
+              &nbsp;صحت اطلاعات وارد شده&nbsp;
+              <input type="submit" class="btn btn-primary" value="تغییر">
+            </div>
+          </div>
+        </form>
+        <a href="{% url 'password_change' %}" class="btn btn-warning">تغییر رمز کاربری</a>
+      </div>
+      <!--Middle Part End -->
+      <!--Right Part Start -->
+      {% include 'registration/components/aside.html' %}
+      <!--Right Part End -->
+    </div>
+  </div>
 </div>
-{% endblock %}
+
+{% endblock content %}
+

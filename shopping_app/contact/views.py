@@ -13,11 +13,24 @@ def contact_us(request):
         subject = contact_form.cleaned_data.get('subject_input')
         text = contact_form.cleaned_data.get('text_input')
 
-        ContactUs.objects.create(name=name,email=email,subject=subject,text=text)
+        ContactUs.objects.create(
+            name=name, email=email, subject=subject, text=text)
         contact_form = ContactForm()
 
     context = {
-        'contact_form':contact_form
+        'contact_form': contact_form
     }
 
-    return render(request,'product/contact.html', context)
+    return render(request, 'contact/contact-us.html', context)
+
+
+def about_us(request):
+    context = {
+    }
+    return render(request, 'contact/about-us.html', context)
+
+
+def faq(request):
+    context = {
+    }
+    return render(request, 'contact/faq.html', context)

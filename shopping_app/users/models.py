@@ -5,5 +5,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class User(AbstractUser):
-	email = models.EmailField(unique=True,verbose_name='ایمیل')
-	phonenumber = PhoneNumberField(unique=True,default='09120000000',verbose_name='شماره همراه')
+    email = models.EmailField(unique=True, verbose_name='ایمیل')
+    phonenumber = PhoneNumberField(unique=True, verbose_name='شماره همراه')
+
+
+

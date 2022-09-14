@@ -13,31 +13,31 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
-from users.views import Login, navbar_login
-from product.views import sidebar_pattern
-
-# for read media in debug mode
+from users.views import CustomLoginView
 from django.conf import settings
-from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('product.urls', namespace='product')),
-    path('login/', Login.as_view(), name='login'),
-    path('contact/', include('contact.urls')),
+    path('login/', CustomLoginView.as_view(), name='login'),
     path('', include('django.contrib.auth.urls')),
     path('account/', include('users.urls')),
     path('order/', include('product_order.urls')),
+    path('contact/', include('contact.urls')),
 
-    path('navbar_login', navbar_login, name='navbar_login'),
-    path('sidebar_pattern', sidebar_pattern, name='sidebar_pattern'),
+    path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ]
 
 
 if settings.DEBUG:
     import debug_toolbar
+    # for read media in debug mode
+    from django.conf.urls.static import static
+
     urlpatterns += [
         path("__debug__/", include(debug_toolbar.urls)),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

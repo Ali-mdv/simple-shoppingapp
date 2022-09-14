@@ -1,0 +1,13 @@
+{% for cat in cat.children.all %}
+<li>
+    <a href="{% url 'product:category_products' cat.slug %}">{{cat.title}} 
+        <span>&rsaquo;</span></a>
+    {% if cat.children.all %} 
+    <div class="dropdown-menu">
+        <ul>
+            {% include 'template_tags/category_loop.html'%} 
+        </ul>
+    </div>
+    {% endif %}
+</li>
+{% endfor %}

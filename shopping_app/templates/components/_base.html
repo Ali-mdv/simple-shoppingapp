@@ -1,0 +1,88 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html dir="rtl">
+  <head>
+  <meta charset="UTF-8" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link href="{% static '/product/image/favicon.png' %}" rel="icon" />
+  <title>{% block title %}{% endblock %}</title>
+  <meta name="description" content="Responsive and clean html template design for any kind of ecommerce webshop">
+  <!-- CSS Part Start-->
+  <link rel="stylesheet" type="text/css" href="{% static '/product/js/bootstrap/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static '/product/js/bootstrap/css/bootstrap-rtl.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static '/product/css/font-awesome/css/font-awesome.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static '/product/css/stylesheet.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static '/product/css/owl.carousel.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static '/product/css/owl.transitions.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static '/product/css/responsive.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static '/product/css/stylesheet-rtl.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static '/product/css/responsive-rtl.css' %}" />
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans' type='text/css'>
+  {% if request.resolver_match.url_name == 'detail' %}
+    <link rel="stylesheet" type="text/css" href="{% static '/product/js/swipebox/src/css/swipebox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+  {% endif %}
+  <!-- CSS Part End-->
+  </head>
+  <body>
+<div class="wrapper-wide">
+  <!--Header Start-->
+  {% include 'components/header.html' %}
+  <!--Header End-->
+
+  <!--Container Start-->
+  {%block content%}
+  {% endblock content %}
+  <!--Container End-->
+
+  <!--Footer Start-->
+  {% include 'components/footer.html' %}
+  <!--Footer End-->
+
+  <!-- Side Block Start -->
+  {% include 'components/side_block.html' %}
+  <!-- Side Block End -->
+
+</div>
+<!-- JS Part Start-->
+<script type="text/javascript" src="{% static '/product/js/jquery-2.1.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/product/js/bootstrap/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/product/js/jquery.easing-1.3.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/product/js/jquery.dcjqaccordion.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/product/js/owl.carousel.min.js' %}"></script>
+<script type="text/javascript" src="{% static '/product/js/custom.js' %}"></script>
+{% if request.resolver_match.url_name == 'detail' %}
+  <script type="text/javascript" src="{% static '/product/js/jquery.elevateZoom-3.0.8.min.js' %}"></script>
+  <script type="text/javascript" src="{% static '/product/js/swipebox/lib/ios-orientationchange-fix.js' %}"></script>
+  <script type="text/javascript" src="{% static '/product/js/swipebox/src/js/jquery.swipebox.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+  <script type="text/javascript">
+    
+  // Elevate Zoom for Product Page image
+  $("#zoom_01").elevateZoom({
+    gallery:'gallery_01',
+    cursor: 'pointer',
+    galleryActiveClass: 'active',
+    imageCrossfade: true,
+    zoomWindowFadeIn: 500,
+    zoomWindowFadeOut: 500,
+    zoomWindowPosition : 11,
+    lensFadeIn: 500,
+    lensFadeOut: 500,
+    loadingIcon: 'image/progress.gif'
+    }); 
+  //////pass the images to swipebox
+  $("#zoom_01").bind("click", function(e) {
+    var ez =   $('#zoom_01').data('elevateZoom');
+    $.swipebox(ez.getGalleryList());
+    return false;
+  });
+  </script>
+{% endif %}
+{% block javascript %}
+{% endblock javascript %}
+<!-- JS Part End-->
+</body>
+</html>

@@ -1,0 +1,13 @@
+{% for cat in categories %}
+<div class="column col-lg-2 col-md-3">
+    <a href="{% url 'product:category_products' cat.slug %}">{{cat.title}}</a>
+    <div>
+        <ul>
+        {% if cat.children.all %} 
+            {% include 'template_tags/category_loop.html' %} 
+        {% endif %}
+        </ul>
+    </div>
+</div>
+{% endfor %}
+

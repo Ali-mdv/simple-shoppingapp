@@ -1,0 +1,56 @@
+{% load static %}
+
+{% if details_orders %}
+<div class="col-table-cell col-lg-3 col-md-3 col-sm-6 col-xs-12">
+    <div id="cart">
+      <button type="button" data-toggle="dropdown" data-loading-text="Loading..." class="heading dropdown-toggle">
+      <span class="cart-icon pull-left flip"></span>
+      <span id="cart-total">{{details_orders.count}} آیتم - {{order.total_price_order}}</span></button>
+      <ul class="dropdown-menu">
+        <li>
+          <table class="table">
+            <tbody>
+            {% for detail in details_orders %}
+              <tr>
+                <td class="text-center"><a href="{% url 'product:detail' detail.product.slug %}"><img class="img-thumbnail" title="{{detail.product.title}}" alt="{{detail.product.title}}" src="{{detail.product.image.url}}" width="50px" height="50px"></a></td>
+                <td class="text-left"><a href="{% url 'product:detail' detail.product.slug %}">{{detail.product.title}}</a></td>
+                <td class="text-right">x {{detail.count}}</td>
+                <td class="text-right">{{detail.total_price_detail}}</td>
+                <td class="text-center">
+                    <a href="{% url 'order:delete_item' detail.id %}" class="btn btn-danger btn-xs remove" title="حذف" onClick="" type="button">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </li>
+        <li>
+          <div>
+            <table class="table table-bordered">
+              <tbody>
+                <tr>
+                  <td class="text-right"><strong>جمع کل</strong></td>
+                  <td class="text-right">{{order.total_price_order}}</td>
+                </tr>
+                <tr>
+                  <td class="text-right"><strong>قابل پرداخت</strong></td>
+                  <td class="text-right">{{order.total_price_order}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="checkout">
+                <a href="{% url 'order:cart' %}" class="btn btn-primary">
+                    <i class="fa fa-shopping-cart"></i> مشاهده سبد
+                </a>&nbsp;&nbsp;&nbsp;
+                <a href="checkout.html" class="btn btn-primary">
+                    <i class="fa fa-share"></i> تسویه حساب
+                </a>
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+</div>
+{% endif %}
