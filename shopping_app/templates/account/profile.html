@@ -3,9 +3,8 @@
 
 
 {% block title %}
-فروشگاه شهر تاب | ایجاد گذرواژه جدید
+فروشگاه شهر تاب | پروفایل کاربری
 {% endblock title %}
-
 
 {% block content %}
 <div id="container">
@@ -13,23 +12,23 @@
     <!-- Breadcrumb Start-->
     <ul class="breadcrumb">
       <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
-      <li><a href="{% url 'login' %}">حساب کاربری</a></li>
-      <li><a href="{% url 'password_reset_confirm' %}">ایجاد گذرواژه جدید</a></li>
+      <li><a href="{% url 'users:profile' %}">پروفایل کاربری</a></li>
     </ul>
     <!-- Breadcrumb End-->
     <div class="row">
       <!--Middle Part Start-->
       <div class="col-sm-9" id="content">
-        <h1 class="title">ایجاد گذرواژه جدید</h1><hr>
+        <h1 class="title">پروفایل کاربری</h1>
         <form class="form-horizontal" method="post">{% csrf_token %}
-            {% if form.non_field_errors %}
-            <div class="non-field-errors alert alert-danger" style='direction:rtl;'>
-                {% for err in form.non_field_errors %}
-                    <p class="text-error" style='color:red;'>{{ err }}</p>
-                {% endfor %}
-            </div>
-            {% endif %}
+          {% if form.non_field_errors %}
+          <div class="non-field-errors alert alert-danger" style='direction:rtl;'>
+              {% for err in form.non_field_errors %}
+                  <p class="text-error" style='color:red;'>{{ err }}</p>
+              {% endfor %}
+          </div>
+          {% endif %}
           <fieldset id="account">
+            <legend>اطلاعات کاربری</legend>
             {% for field in form %}
             <div class="form-group required">
               <label class="col-sm-2 control-label" for="{{field.id_for_label}}">{{field.label}}</label>
@@ -55,10 +54,11 @@
             <div class="pull-right">
               <input type="checkbox" value="1" name="agree" required>
               &nbsp;صحت اطلاعات وارد شده&nbsp;
-              <input type="submit" class="btn btn-primary" value="ادامه">
+              <input type="submit" class="btn btn-primary" value="تغییر">
             </div>
           </div>
         </form>
+        <a href="{% url 'password_change' %}" class="btn btn-warning">تغییر رمز کاربری</a>
       </div>
       <!--Middle Part End -->
       <!--Right Part Start -->

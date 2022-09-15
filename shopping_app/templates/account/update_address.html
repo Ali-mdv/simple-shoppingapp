@@ -3,7 +3,7 @@
 
 
 {% block title %}
-فروشگاه شهر تاب | پروفایل کاربری
+فروشگاه شهر تاب | اصلاح آدرس
 {% endblock title %}
 
 {% block content %}
@@ -12,14 +12,13 @@
     <!-- Breadcrumb Start-->
     <ul class="breadcrumb">
       <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
-      <li><a href="{% url 'login' %}">حساب کاربری</a></li>
-      <li><a href="{% url 'users:signup' %}">پروفایل کاربری</a></li>
+      <li><a href="{% url 'users:profile' %}">پروفایل کاربری</a></li>
+      <li><a href="{% url 'users:address' %}">لیست آدرس ها</a></li>
     </ul>
     <!-- Breadcrumb End-->
     <div class="row">
       <!--Middle Part Start-->
       <div class="col-sm-9" id="content">
-        <h1 class="title">پروفایل کاربری</h1>
         <form class="form-horizontal" method="post">{% csrf_token %}
           {% if form.non_field_errors %}
           <div class="non-field-errors alert alert-danger" style='direction:rtl;'>
@@ -29,7 +28,6 @@
           </div>
           {% endif %}
           <fieldset id="account">
-            <legend>اطلاعات کاربری</legend>
             {% for field in form %}
             <div class="form-group required">
               <label class="col-sm-2 control-label" for="{{field.id_for_label}}">{{field.label}}</label>
@@ -55,15 +53,14 @@
             <div class="pull-right">
               <input type="checkbox" value="1" name="agree" required>
               &nbsp;صحت اطلاعات وارد شده&nbsp;
-              <input type="submit" class="btn btn-primary" value="تغییر">
+              <input type="submit" class="btn btn-primary" value="ثبت">
             </div>
           </div>
         </form>
-        <a href="{% url 'password_change' %}" class="btn btn-warning">تغییر رمز کاربری</a>
       </div>
       <!--Middle Part End -->
       <!--Right Part Start -->
-      {% include 'registration/components/aside.html' %}
+      {% include 'components/profile_aside.html' %}
       <!--Right Part End -->
     </div>
   </div>

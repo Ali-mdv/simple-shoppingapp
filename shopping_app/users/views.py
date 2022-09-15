@@ -3,9 +3,9 @@ from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import UpdateView
-from .models import User
-from .forms import ProfileForm, SignupForm
+from django.views.generic import CreateView, UpdateView, DeleteView
+from .models import User, UserAddress
+from .forms import ProfileForm, SignupForm, UserAddressForm
 from django.urls import reverse_lazy, reverse
 
 from django.http import HttpResponse
@@ -16,6 +16,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 # Create your views here.
+from django.core.exceptions import ValidationError
 
 
 # def register(request):
@@ -70,7 +71,7 @@ class CustomLoginView(LoginView):
 
 class Profile(LoginRequiredMixin, UpdateView):
     form_class = ProfileForm
-    template_name = 'registration/profile.html'
+    template_name = 'account/profile.html'
     success_url = reverse_lazy('users:profile')
 
     def get_object(self):
@@ -124,3 +125,37 @@ def activate(request, uidb64, token):
         return HttpResponse('<p>Thank you for your email confirmation. Now you can login your account.</p>\n<p><a href="/login">login</a></p>')
     else:
         return HttpResponse('Activation link is invalid!')
+
+
+class AddressCreateView(LoginRequiredMixin, CreateView):
+    model = UserAddress
+    form_class = UserAddressForm
+    template_name = "account/list_create_address.html"
+    success_url = reverse_lazy('users:address')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        addresses = UserAddress.objects.filter(user=self.request.user)
+        context['addresses'] = addresses
+        return context
+
+
+class AddressUpdateView(LoginRequiredMixin,UpdateView):
+    model = UserAddress
+    fields = ("city", "address", "post_code", )
+    template_name = 'account/update_address.html'
+    success_url = reverse_lazy('users:address')
+
+
+class AddressDeleteView(LoginRequiredMixin,DeleteView):
+    model = UserAddress
+    success_url = reverse_lazy('users:address')

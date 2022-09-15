@@ -1,8 +1,8 @@
-from logging import PlaceHolder
 from django import forms
-from .models import User
+from .models import User, UserAddress
 from django.contrib.auth.forms import UserCreationForm
 from phonenumber_field.formfields import PhoneNumberField
+from django.core.exceptions import ValidationError
 
 
 class LoginForm(forms.Form):
@@ -81,3 +81,18 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'phonenumber', 'password1', 'password2')
+
+
+class UserAddressForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = UserAddress
+        fields = ("city", "address", "post_code", )
+
+    def clean(self):
+        if self.user.useraddress_set.count() >= 3:
+            raise ValidationError("ثبت بیش از ۳ آدرس امکانپذیر نیست.")
+

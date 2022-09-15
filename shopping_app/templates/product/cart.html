@@ -8,6 +8,7 @@
 {% block content %}
 <div id="container">
   <div class="container">
+    {% if details_orders %}
     <!-- Breadcrumb Start-->
     <ul class="breadcrumb">
       <li><a href="index.html"><i class="fa fa-home"></i></a></li>
@@ -511,6 +512,12 @@
       </div>
       <!--Middle Part End -->
     </div>
+  </div>
+  {% else %}
+  <div class="alert alert-warning">
+    <p>سبد خرید شما خالیست.</p>
+    <p>برای ادامه خرید <a href="{% url 'product:home' %}">کلیک </a>کنید.</p>
+    {% endif %}
   </div>
 </div>
 {% endblock content %}

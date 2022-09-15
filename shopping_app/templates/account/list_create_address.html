@@ -3,9 +3,8 @@
 
 
 {% block title %}
-فروشگاه شهر تاب | ایجاد گذرواژه جدید
+فروشگاه شهر تاب | لیست آدرس ها
 {% endblock title %}
-
 
 {% block content %}
 <div id="container">
@@ -13,23 +12,41 @@
     <!-- Breadcrumb Start-->
     <ul class="breadcrumb">
       <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
-      <li><a href="{% url 'login' %}">حساب کاربری</a></li>
-      <li><a href="{% url 'password_reset_confirm' %}">ایجاد گذرواژه جدید</a></li>
+      <li><a href="{% url 'users:profile' %}">پروفایل کاربری</a></li>
+      <li><a href="{% url 'users:address' %}">لیست آدرس ها</a></li>
     </ul>
     <!-- Breadcrumb End-->
     <div class="row">
       <!--Middle Part Start-->
       <div class="col-sm-9" id="content">
-        <h1 class="title">ایجاد گذرواژه جدید</h1><hr>
-        <form class="form-horizontal" method="post">{% csrf_token %}
-            {% if form.non_field_errors %}
-            <div class="non-field-errors alert alert-danger" style='direction:rtl;'>
-                {% for err in form.non_field_errors %}
-                    <p class="text-error" style='color:red;'>{{ err }}</p>
-                {% endfor %}
+        <h1 class="title">لیست آدرس ها</h1><hr>
+        <div class="row">
+          {% for address in addresses %}
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">{{forloop.counter}}</h4>
+                <p class="card-text">آدرس : {{address.city}} , {{address.address}}</p>
+                <p class="card-text">کد پستی : {{address.post_code}}</p>
+                <a href="{% url 'users:address-update' address.pk %}" class="btn btn-primary">تغییر</a>
+                <form method="POST" action="{% url 'users:address-delete' address.pk %}">{% csrf_token %}
+                  <button class="btn btn-danger">حذف</button>
+               </form>
+              </div>
             </div>
-            {% endif %}
+          </div>
+          {% endfor %}
+        </div><br><br>
+        <form class="form-horizontal" method="post">{% csrf_token %}
+          {% if form.non_field_errors %}
+          <div class="non-field-errors alert alert-danger" style='direction:rtl;'>
+              {% for err in form.non_field_errors %}
+                  <p class="text-error" style='color:red;'>{{ err }}</p>
+              {% endfor %}
+          </div>
+          {% endif %}
           <fieldset id="account">
+            <legend>ایجاد آدرس جدید</legend>
             {% for field in form %}
             <div class="form-group required">
               <label class="col-sm-2 control-label" for="{{field.id_for_label}}">{{field.label}}</label>
@@ -55,7 +72,7 @@
             <div class="pull-right">
               <input type="checkbox" value="1" name="agree" required>
               &nbsp;صحت اطلاعات وارد شده&nbsp;
-              <input type="submit" class="btn btn-primary" value="ادامه">
+              <input type="submit" class="btn btn-primary" value="ثبت">
             </div>
           </div>
         </form>

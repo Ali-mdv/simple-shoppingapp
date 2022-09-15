@@ -1,0 +1,18 @@
+<aside id="column-right" class="col-sm-3 hidden-xs">
+    <h3 class="subtitle">حساب کاربری</h3>
+    <div class="list-group">
+        <ul class="list-item">
+            {% if not request.user.is_authenticated %}
+            <li><a href="{% url 'login' %}">ورود</a></li>
+            <li><a href="{% url 'users:signup' %}">ثبت نام</a></li>
+            <li><a href="{% url 'password_reset' %}">فراموشی رمز عبور</a></li>
+            {% else %}
+            <li><a href="{% url 'users:profile' %}">پروفایل کاربری</a></li>
+            <li><a href="{% url 'users:address' %}">لیست آدرس ها</a></li>
+            <li><a href="{% url 'order:cart' %}">سبد خرید</a></li>
+            <li><a href="wishlist.html">لیست علاقه مندی</a></li>
+            <li><a href="#">تاریخچه سفارشات</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</aside>
