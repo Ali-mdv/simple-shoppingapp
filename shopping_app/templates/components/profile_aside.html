@@ -10,7 +10,7 @@
             <li><a href="{% url 'users:profile' %}">پروفایل کاربری</a></li>
             <li><a href="{% url 'users:address' %}">لیست آدرس ها</a></li>
             <li><a href="{% url 'order:cart' %}">سبد خرید</a></li>
-            <li><a href="wishlist.html">لیست علاقه مندی</a></li>
+            <li><a href="{% url 'users:wishlist' %}">لیست علاقه مندی</a></li>
             <li><a href="#">تاریخچه سفارشات</a></li>
             {% endif %}
         </ul>

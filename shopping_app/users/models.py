@@ -1,8 +1,8 @@
-from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.exceptions import ValidationError
+from product.models import Product
 # Create your models here.
 
 
@@ -31,3 +31,23 @@ class UserAddress(models.Model):
 
     def __str__(self):
         return self.address
+
+
+class UserWishList(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        unique=True
+    )
+    items = models.ManyToManyField(Product, verbose_name="محصولات")
+
+    class Meta:
+        verbose_name = "علاقه مندی"
+        verbose_name_plural = "لیست علاقه مندی"
+
+    def __str__(self):
+        return self.user.username
+
+    def items_to_str(self):
+        return ", ".join([item.title for item in self.items.all()])
+    items_to_str.short_description = "اقلام"

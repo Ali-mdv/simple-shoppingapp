@@ -88,7 +88,10 @@
                 </form>
                 <div class="cart">
                   <div>
-                    <button type="button" class="wishlist" onClick=""><i class="fa fa-heart"></i> افزودن به علاقه مندی ها</button>
+                    <form action="{% url 'users:wishlist-add' %}" method="post">{% csrf_token %}
+                      <input type="hidden" name="product_id" value="{{product.id}}">
+                      <button type="submit" class="wishlist" onClick=""><i class="fa fa-heart"></i> افزودن به علاقه مندی ها</button>
+                    </form>
                     <br />
                   </div>
                 </div>

@@ -1,0 +1,67 @@
+{% extends 'components/_base.html' %}
+
+{% block title %}
+فروشگاه شهر تاب | لیست مورد علاقه
+{% endblock title %}
+
+{% block content %}
+<div id="container">
+  <div class="container">
+    <!-- Breadcrumb Start-->
+    <ul class="breadcrumb">
+      <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+      <li><a href="{% url 'users:profile' %}">حساب کاربری</a></li>
+      <li><a href="{% url 'users:wishlist' %}">لیست علاقه مندی من</a></li>
+    </ul>
+    <!-- Breadcrumb End-->
+    <div class="row">
+      <!--Middle Part Start-->
+      {% if object_list %}
+      <div id="content" class="col-sm-12">
+        <h1 class="title">لیست علاقه مندی</h1>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <td class="text-center">تصویر</td>
+                <td class="text-left">نام محصول</td>
+                <td class="text-left">مدل</td>
+                <td class="text-left">بافت</td>
+                <td class="text-right">موجودی</td>
+                <td class="text-right">قیمت واحد</td>
+                <td class="text-right">عملیات</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in object_list %}
+              <tr>
+                <td class="text-center"><a href="{% url 'product:detail' item.slug %}"><img src="{{item.image.url}}" alt="{{item.title}}" title="{{item.title}}" class="img-thumbnail" width="70px"/></a></td>
+                <td class="text-left">{{item.title}}</td>
+                <td class="text-left">{{item.get_model}}</td>
+                <td class="text-left">{{item.get_texture}}</td>
+                <td class="text-right">موجود</td>
+                <td class="text-right"><div class="price"> {{item.price}} </div></td>
+                <td class="text-right">
+                  <a class="btn btn-primary" href="{% url 'product:detail' item.slug %}" title="" data-toggle="tooltip" onClick="cart.add('48');" data-original-title="مشاهده و خرید کالا">
+                    <i class="fa fa-shopping-cart"></i>
+                  </a>
+                  <a class="btn btn-danger" title="" data-toggle="tooltip" href="{% url 'users:wishlist-delete' item.pk %}" data-original-title="حذف">
+                    <i class="fa fa-times"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% else %}
+      <div class="alert alert-warning">
+        <p>لیست علاقه مندی شما خالیست.</p>
+        <p>برای افزودن کالا به لیست <a href="{% url 'product:home' %}">کلیک </a>کنید.</p>
+      {% endif %}
+      <!--Middle Part End -->
+    </div>
+  </div>
+</div>
+{% endblock content %}

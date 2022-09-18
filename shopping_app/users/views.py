@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView, DeleteView
-from .models import User, UserAddress
-from .forms import ProfileForm, SignupForm, UserAddressForm
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from .models import User, UserAddress, UserWishList
 from django.urls import reverse_lazy, reverse
 
 from django.http import HttpResponse
@@ -13,10 +13,13 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
-from .tokens import account_activation_token
 from django.core.mail import EmailMessage
+
+from .forms import ProfileForm, SignupForm, UserAddressForm
+from .tokens import account_activation_token
+from product.models import Product
+
 # Create your views here.
-from django.core.exceptions import ValidationError
 
 
 # def register(request):
@@ -149,13 +152,49 @@ class AddressCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class AddressUpdateView(LoginRequiredMixin,UpdateView):
+class AddressUpdateView(LoginRequiredMixin, UpdateView):
     model = UserAddress
     fields = ("city", "address", "post_code", )
     template_name = 'account/update_address.html'
     success_url = reverse_lazy('users:address')
 
 
-class AddressDeleteView(LoginRequiredMixin,DeleteView):
+class AddressDeleteView(LoginRequiredMixin, DeleteView):
     model = UserAddress
     success_url = reverse_lazy('users:address')
+
+
+class UserWishListView(LoginRequiredMixin, ListView):
+    model = UserWishList
+    template_name = 'account/wishlist.html'
+
+    def get_queryset(self):
+        try:
+            wish_list = UserWishList.objects.get(user=self.request.user)
+        except:
+            wish_list = UserWishList.objects.create(user=self.request.user)
+
+        products = wish_list.items.all()
+
+        return products
+
+
+@login_required
+def add_item_wishlist(request):
+    try:
+        product = Product.objects.get(pk=request.POST.get("product_id"))
+        wish_list = UserWishList.objects.get(user=request.user)
+        wish_list.items.add(product)
+    except:
+        pass
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def remove_item_wishlist(request, pk):
+    try:
+        wish_list = UserWishList.objects.get(user=request.user)
+        wish_list.items.remove(Product.objects.get(pk=pk))
+    except:
+        pass
+    return redirect("users:wishlist")

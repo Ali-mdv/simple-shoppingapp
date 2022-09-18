@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, UserAddress
+from .models import User, UserAddress, UserWishList
 # Register your models here.
 
 
@@ -14,3 +14,9 @@ UserAdmin.fieldsets[1][1]['fields'] = (
 class UserAddressAdmin(admin.ModelAdmin):
     list_display = ("user", "city", "address", "post_code")
     search_fields = ("user", "address", "post_code")
+
+
+@admin.register(UserWishList)
+class UserWishListAdmin(admin.ModelAdmin):
+    list_display = ("user", "items_to_str")
+    search_fields = ("user",)
