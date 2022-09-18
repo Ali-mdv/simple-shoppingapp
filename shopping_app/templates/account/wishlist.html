@@ -35,14 +35,14 @@
             <tbody>
               {% for item in object_list %}
               <tr>
-                <td class="text-center"><a href="{% url 'product:detail' item.slug %}"><img src="{{item.image.url}}" alt="{{item.title}}" title="{{item.title}}" class="img-thumbnail" width="70px"/></a></td>
+                <td class="text-center"><a href="{{item.get_absolute_url}}"><img src="{{item.image.url}}" alt="{{item.title}}" title="{{item.title}}" class="img-thumbnail" width="70px"/></a></td>
                 <td class="text-left">{{item.title}}</td>
                 <td class="text-left">{{item.get_model}}</td>
                 <td class="text-left">{{item.get_texture}}</td>
                 <td class="text-right">موجود</td>
                 <td class="text-right"><div class="price"> {{item.price}} </div></td>
                 <td class="text-right">
-                  <a class="btn btn-primary" href="{% url 'product:detail' item.slug %}" title="" data-toggle="tooltip" onClick="cart.add('48');" data-original-title="مشاهده و خرید کالا">
+                  <a class="btn btn-primary" href="{{item.get_absolute_url}}" title="" data-toggle="tooltip" onClick="cart.add('48');" data-original-title="مشاهده و خرید کالا">
                     <i class="fa fa-shopping-cart"></i>
                   </a>
                   <a class="btn btn-danger" title="" data-toggle="tooltip" href="{% url 'users:wishlist-delete' item.pk %}" data-original-title="حذف">

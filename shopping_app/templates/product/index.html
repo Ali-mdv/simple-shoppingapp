@@ -62,12 +62,12 @@
           {% for product in random_choices %}
             <div class="product-thumb clearfix">
               <div class="image">
-                <a href="{% url 'product:detail' product.slug %}">
+                <a href="{{product.get_absolute_url}}">
                   <img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" />
                 </a>
               </div>
               <div class="caption">
-                <h4><a href="{% url 'product:detail' product.slug %}">{{product.title}}</a></h4>
+                <h4><a href="{{product.get_absolute_url}}">{{product.title}}</a></h4>
                 <p class="price"> 
                   {% if product.is_special %}
                       <span class="price-new">{{product.price}}</span> 
@@ -116,9 +116,9 @@
                 <div class="owl-carousel latest_category_tabs">
                   {% for product in cat.product_set.all|slice:":10" %}
                     <div class="product-thumb">
-                      <div class="image"><a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
+                      <div class="image"><a href="{{product.get_absolute_url}}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
                       <div class="caption">
-                        <h4><a href="{% url 'product:detail' product.slug %}">{{product.title}}</a></h4>
+                        <h4><a href="{{product.get_absolute_url}}">{{product.title}}</a></h4>
                         <p class="price"> 
                           {% if product.is_special %}
                               <span class="price-new">{{product.price}}</span> 
@@ -162,9 +162,9 @@
         <div class="owl-carousel latest_category_carousel">
           {% for product in top_rated_products %}
           <div class="product-thumb">
-            <div class="image"><a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
+            <div class="image"><a href="{{product.get_absolute_url}}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
             <div class="caption">
-              <h4><a href="{% url 'product:detail' product.slug %}">{{product.title}}</a></h4>
+              <h4><a href="{{product.get_absolute_url}}">{{product.title}}</a></h4>
               <p class="price"> 
                 {% if product.is_special %}
                     <span class="price-new">{{product.price}}</span> 
@@ -195,9 +195,9 @@
         <div class="owl-carousel latest_brands_carousel">
           {% for product in best_seller_products %}
             <div class="product-thumb">
-              <div class="image"><a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
+              <div class="image"><a href="{{product.get_absolute_url}}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
               <div class="caption">
-                <h4><a href="{% url 'product:detail' product.slug %}">{{product.title}}</a></h4>
+                <h4><a href="{{product.get_absolute_url}}">{{product.title}}</a></h4>
                 <p class="price"> 
                   {% if product.is_special %}
                       <span class="price-new">{{product.price}}</span> 

@@ -10,6 +10,7 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 from star_ratings.models import Rating
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.urls import reverse
 
 # from django.db.models import Avg
 
@@ -166,8 +167,8 @@ class Product(models.Model):
     # def get_average_rating(self):
     #     return self.comments.aggregate(Avg("rating"))["rating__avg"]
 
-    # def get_absolute_url(self):
-    # 	return reverse('product:detail',kwargs={'slug':self.slug})
+    def get_absolute_url(self):
+        return reverse('product:detail', args=[self.slug])
 
     objects = ProductManager()
 

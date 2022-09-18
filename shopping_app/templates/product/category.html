@@ -25,8 +25,8 @@
         <div class="category-list-thumb row">
           {% for product in suggested_products %}
           <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4"> 
-            <a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt="{{product.title}}" /></a> 
-            <a href="{% url 'product:detail' product.slug %}">{{product.title}}</a> 
+            <a href="{{product.get_absolute_url}}"><img src="{{product.image.url}}" alt="{{product.title}}" /></a> 
+            <a href="{{product.get_absolute_url}}">{{product.title}}</a> 
           </div>
           {% endfor %}
         </div>
@@ -59,10 +59,10 @@
           {% for product in products %}
           <div class="product-layout product-list col-xs-12">
             <div class="product-thumb">
-              <div class="image"><a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt=" {{product.title}}" title=" {{product.title}}" class="img-responsive" /></a></div>
+              <div class="image"><a href="{{product.get_absolute_url}}"><img src="{{product.image.url}}" alt=" {{product.title}}" title=" {{product.title}}" class="img-responsive" /></a></div>
               <div>
                 <div class="caption">
-                  <h4><a href="{% url 'product:detail' product.slug %}"> {{product.title}}</a></h4>
+                  <h4><a href="{{product.get_absolute_url}}"> {{product.title}}</a></h4>
                   <p class="price"> 
                     {% if product.is_special %}
                         <span class="price-new">{{product.price}}</span> 
