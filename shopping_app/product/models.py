@@ -85,6 +85,14 @@ class Category(models.Model):
     def __str__(self) -> str:
         return self.title
 
+    def show_type(self) -> str:
+        if self.category_type == "M":
+            return "مدل"
+        if self.category_type == "T":
+            return "بافت"
+        else:
+            return "تاب"
+
 
 class Product(models.Model):
     title = models.CharField(max_length=60, verbose_name="عنوان")

@@ -11,8 +11,8 @@
     {% if details_orders %}
     <!-- Breadcrumb Start-->
     <ul class="breadcrumb">
-      <li><a href="index.html"><i class="fa fa-home"></i></a></li>
-      <li><a href="cart.html">سبد خرید</a></li>
+      <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+      <li><a href="{% url 'order:cart' %}">سبد خرید</a></li>
     </ul>
     <!-- Breadcrumb End-->
     <div class="row">
@@ -34,7 +34,7 @@
               <tbody>
                 {% for detail in details_orders %}
                 <tr>
-                  <td class="text-center"><a href="{% url 'product:detail' detail.product.slug %}"><img src="{{detail.product.image.url}}" alt="{{detail.product.title}}" title="{{detail.product.title}}" class="img-thumbnail" width="100px"/></a></td>
+                  <td class="text-center"><a href="{% url 'product:detail' detail.product.slug %}"><img src="{{detail.product.image.url}}" alt="{{detail.product.title}}" title="{{detail.product.title}}" class="img-thumbnail" width="70px"/></a></td>
                   <td class="text-left"><a href="{% url 'product:detail' detail.product.slug %}">{{detail.product.title}}</a><br />
                   <td class="text-left">{{detail.product.get_model}}|{{detail.product.get_texture}}</td>
                   <td class="text-left"><div class="input-group btn-block quantity">

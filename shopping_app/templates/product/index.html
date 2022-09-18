@@ -81,7 +81,6 @@
                 </div>
               </div>
               <div class="button-group">
-                <button class="btn-primary" type="button" onClick="cart.add('42');"><span>افزودن به سبد</span></button>
                 <div class="add-to-links">
                   <form action="{% url 'users:wishlist-add' %}" method="post">{% csrf_token %}
                     <input type="hidden" name="product_id" value="{{product.id}}">
@@ -117,9 +116,9 @@
                 <div class="owl-carousel latest_category_tabs">
                   {% for product in cat.product_set.all|slice:":10" %}
                     <div class="product-thumb">
-                      <div class="image"><a href="product.html"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
+                      <div class="image"><a href="{% url 'product:detail' product.slug %}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
                       <div class="caption">
-                        <h4><a href="product.html">{{product.title}}</a></h4>
+                        <h4><a href="{% url 'product:detail' product.slug %}">{{product.title}}</a></h4>
                         <p class="price"> 
                           {% if product.is_special %}
                               <span class="price-new">{{product.price}}</span> 
@@ -133,7 +132,6 @@
                         </div>
                       </div>
                       <div class="button-group">
-                        <button class="btn-primary" type="button" onClick=""><span>افزودن به سبد</span></button>
                         <div class="add-to-links">
                           <form action="{% url 'users:wishlist-add' %}" method="post">{% csrf_token %}
                             <input type="hidden" name="product_id" value="{{product.id}}">
@@ -180,7 +178,6 @@
               </div>
             </div>
             <div class="button-group">
-              <button class="btn-primary" type="button" onClick=""><span>افزودن به سبد</span></button>
               <div class="add-to-links">
                 <form action="{% url 'users:wishlist-add' %}" method="post">{% csrf_token %}
                   <input type="hidden" name="product_id" value="{{product.id}}">
@@ -209,10 +206,11 @@
                       <span class="price-new">{{product.price}}</span> 
                   {% endif %}
                 </p>
-                <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> </div>
+                <div class="stars-outer">
+                  <div class="stars-inner">{{product.ratings.get.average}}</div>
+                </div>
               </div>
               <div class="button-group">
-                <button class="btn-primary" type="button" onClick=""><span>افزودن به سبد</span></button>
                 <div class="add-to-links">
                   <form action="{% url 'users:wishlist-add' %}" method="post">{% csrf_token %}
                     <input type="hidden" name="product_id" value="{{product.id}}">
@@ -224,19 +222,6 @@
             </div>
           {% endfor %}
         </div>
-        <!-- Brand محصولات Slider End -->
-        <!-- Brand Logo Carousel Start-->
-        <div id="carousel" class="owl-carousel nxt">
-          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/apple_logo-100x100.jpg' %}" alt="پالم" class="img-responsive" /></a> </div>
-          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/canon_logo-100x100.jpg' %}" alt="سونی" class="img-responsive" /></a> </div>
-          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/apple_logo-100x100.jpg' %}" alt="کنون" class="img-responsive" /></a> </div>
-          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/canon_logo-100x100.jpg' %}" alt="اپل" class="img-responsive" /></a> </div>
-          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/apple_logo-100x100.jpg' %}" alt="اچ تی سی" class="img-responsive" /></a> </div>
-          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/canon_logo-100x100.jpg' %}" alt="اچ پی" class="img-responsive" /></a> </div>
-          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/apple_logo-100x100.jpg' %}" alt="brand" class="img-responsive" /></a> </div>
-          <div class="item text-center"> <a href="#"><img src="{% static '/product/image/product/canon_logo-100x100.jpg' %}" alt="brand1" class="img-responsive" /></a> </div>
-        </div>
-        <!-- Brand Logo Carousel End -->
       </div>
       <!--Middle Part End-->
     </div>

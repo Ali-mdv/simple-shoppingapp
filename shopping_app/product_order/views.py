@@ -68,7 +68,7 @@ def delete_item_order(request, item_id):
     except:
         raise Http404('چنین محصولی در سبد خرید شما وجود ندارد.')
 
-    return redirect(f'order:cart')
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 MERCHANT = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
