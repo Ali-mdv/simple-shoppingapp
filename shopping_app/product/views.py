@@ -59,8 +59,8 @@ def products_list(request, page=1):
     return render(request, 'product/products.html', context)
 
 
-def product_detail(request, slug):
-    product = get_object_or_404(Product, slug=slug, status=True)
+def product_detail(request, uuid):
+    product = get_object_or_404(Product, uuid=uuid, status=True)
     product_gallery = ProductGallery.objects.filter(product_id=product.id)
     similar_products = Product.objects.filter(
         Q(category=product.get_model().id) and Q(category=product.get_texture().id))[0:6]

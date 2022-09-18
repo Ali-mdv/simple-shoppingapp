@@ -34,7 +34,7 @@ def add_order(request):
         order.orderdetail_set.create(
             product_id=product.id, price=product.price, count=count)
         print(order.orderdetail_set.all())
-    return redirect('product:detail', slug=product.slug)
+    return redirect('product:detail', uuid=product.uuid)
 
 
 @login_required

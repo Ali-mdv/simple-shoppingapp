@@ -1,18 +1,15 @@
+import uuid
 from django.db import models
 from colorfield.fields import ColorField
 from djmoney.models.fields import MoneyField
 from django.utils.html import format_html
-from extentions.slug_generator import unique_slug_generator
 from extentions.utils import change_image_size
-from django.db.models.signals import pre_save
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 from star_ratings.models import Rating
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.urls import reverse
-
-# from django.db.models import Avg
 
 # Create your Manager here.
 
@@ -97,8 +94,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=60, verbose_name="عنوان")
-    slug = models.SlugField(unique=True, max_length=60,
-                            verbose_name='آدرس', blank=True)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     image = models.ImageField(upload_to='products', verbose_name='عکس')
     description = models.TextField(max_length=500, verbose_name='توضیحات')
     price = MoneyField(verbose_name='قیمت', max_digits=9,
@@ -108,12 +104,14 @@ class Product(models.Model):
     number = models.IntegerField(default=0, verbose_name='تعداد')
     category = models.ManyToManyField(Category, verbose_name="دسته بندی")
     status = models.BooleanField(default=False, verbose_name='وضعیت موجودی')
-    created = models.DateTimeField(auto_now=True, verbose_name='زمان')
-    hits = models.ManyToManyField(IPAdrees, blank=True, verbose_name='بازدید')
+    created = models.DateTimeField(
+        auto_now=True, verbose_name='زمان', editable=False)
+    hits = models.ManyToManyField(
+        IPAdrees, blank=True, verbose_name='بازدید', editable=False)
     is_special = models.BooleanField(default=False, verbose_name='محصول ویژه')
     discount = models.FloatField(default=0, verbose_name="تخفیف")
     count_sold = models.IntegerField(
-        default=0, verbose_name="تعداد فروخته شده")
+        default=0, verbose_name="تعداد فروخته شده", editable=False)
     ratings = GenericRelation(Rating, related_query_name='rate')
 
     class Meta:
@@ -138,12 +136,6 @@ class Product(models.Model):
         return natural_time
     created_humanize.short_description = 'تاریخ ایجاد'
 
-    def check_availabity(self):
-        if self.number == 0:
-            self.status = False
-        else:
-            self.status = True
-
     def category_to_str(self):
         return ", ".join([category.title for category in self.category.all()])
     category_to_str.short_description = "دسته بندی"
@@ -164,11 +156,8 @@ class Product(models.Model):
     def get_discount_percent(self):
         return self.discount * 100
 
-    # def get_average_rating(self):
-    #     return self.comments.aggregate(Avg("rating"))["rating__avg"]
-
     def get_absolute_url(self):
-        return reverse('product:detail', args=[self.slug])
+        return reverse('product:detail', args=[self.uuid])
 
     objects = ProductManager()
 
@@ -210,9 +199,9 @@ class Comment(models.Model):
 
 
 # => generate unique slug for each instance from product model
-def product_pre_save_slug(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
+# def product_pre_save_slug(sender, instance, *args, **kwargs):
+#     if not instance.slug:
+#         instance.slug = unique_slug_generator(instance)
 
 
-pre_save.connect(product_pre_save_slug, sender=Product)
+# pre_save.connect(product_pre_save_slug, sender=Product)
