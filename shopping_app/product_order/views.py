@@ -52,7 +52,7 @@ def detail_cart(request):
         'total': order.total_price_order,
     }
 
-    return render(request, 'product/cart.html', context)
+    return render(request, 'order/cart.html', context)
 
 
 @login_required
@@ -69,6 +69,42 @@ def delete_item_order(request, item_id):
         raise Http404('چنین محصولی در سبد خرید شما وجود ندارد.')
 
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def select_address(request):
+    order = Order.objects.get(owner_id=request.user.id, is_paid=False)
+    addresses = request.user.useraddress_set.all()
+
+    if request.POST:
+        try:
+            address = addresses.get(id=request.POST.get("address"))
+            order.address = address
+            order.save()
+            return redirect("order:checkout-order")
+        except:
+            return redirect("order:address-order")
+
+    context = {
+        'addresses': addresses
+    }
+
+    return render(request, 'order/select_address.html', context)
+
+
+@login_required
+def checkout_order(request):
+    order = Order.objects.get(owner_id=request.user.id, is_paid=False)
+
+    details_orders = order.orderdetail_set.filter(
+        order__owner=request.user, order__is_paid=False)
+
+    context = {
+        'details_orders': details_orders,
+        'order': order,
+    }
+
+    return render(request, 'order/checkout.html', context)
 
 
 MERCHANT = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'

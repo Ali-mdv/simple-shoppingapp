@@ -1,0 +1,55 @@
+{% extends 'components/_base.html' %}
+
+{% block title %}
+فروشگاه شهر تاب | سبد خرید
+{% endblock title %}
+
+
+{% block content %}
+<div id="container">
+  <div class="container">
+    {% if addresses %}
+    <!-- Breadcrumb Start-->
+    <ul class="breadcrumb">
+      <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+      <li><a href="{% url 'order:address-order' %}">انتخاب آدرس</a></li>
+    </ul>
+    <!-- Breadcrumb End-->
+    <h1 class="title">لیست آدرس ها</h1><hr>
+    <div class="row">
+      <!--Middle Part Start-->
+      <form action="" method="post">{% csrf_token %}
+        <div class="col-sm-12">
+          {% for address in addresses %}
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">{{forloop.counter}}</h4>
+                <p class="card-text">آدرس : {{address.city}} , {{address.address}}</p>
+                <p class="card-text">کد پستی : {{address.post_code}}</p>
+                <input type="radio" value="{{address.id}}" id="input-address" name="address" required>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="buttons">
+          <div class="pull-right">
+            <button class="btn btn-primary">ادامه</button>
+          </div>
+        </div>
+      </form>
+    </div>
+      <!--Middle Part End -->
+    </div>
+  </div>
+  {% else %}
+  <div class="alert alert-warning">
+    <p>آدرس ثبت شده ای ندارید.</p>
+    <p>برای افزودن آدرس <a href="{% url 'users:address' %}">کلیک </a>کنید.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}
+
+ 

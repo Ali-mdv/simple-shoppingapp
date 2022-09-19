@@ -1,9 +1,9 @@
 from django.db import models
-from users.models import User
-from product.models import Product
 from djmoney.models.fields import MoneyField
 from django.db.models.manager import Manager
 from django.core.exceptions import ObjectDoesNotExist
+from users.models import User, UserAddress
+from product.models import Product
 
 
 # Create your models here.
@@ -24,6 +24,8 @@ class Order(models.Model):
         verbose_name='تاریخ پرداخت', null=True, blank=True)
     ref_if = models.CharField(
         max_length=100, null=True, blank=True, verbose_name='کد پیگیری')
+    address = models.ForeignKey(
+        UserAddress, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='آدرس')
 
     class Meta:
         verbose_name = 'سبد خرید'

@@ -44,9 +44,11 @@
                 <a href="{% url 'order:cart' %}" class="btn btn-primary">
                     <i class="fa fa-shopping-cart"></i> مشاهده سبد
                 </a>&nbsp;&nbsp;&nbsp;
-                <a href="checkout.html" class="btn btn-primary">
+                {% if order.address %}
+                <a href="{% url 'order:checkout-order' %}" class="btn btn-primary">
                     <i class="fa fa-share"></i> تسویه حساب
                 </a>
+                {% endif %}
             </p>
           </div>
         </li>

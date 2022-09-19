@@ -145,7 +145,6 @@
       url: "{% url 'product:search_products' %}",
       data: { sort: e.target.value, search: "{{search}}"}
     })
-    console.log({ sort: e.target.value, search: "{{search}}"})
     sendButton.submit();
   })
 </script>

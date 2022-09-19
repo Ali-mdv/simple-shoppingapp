@@ -1,0 +1,141 @@
+{% extends 'components/_base.html' %}
+
+{% block title %}
+فروشگاه شهر تاب | سبد خرید
+{% endblock title %}
+
+
+{% block content %}
+  <div id="container">
+    <div class="container">
+      <!-- Breadcrumb Start-->
+      <ul class="breadcrumb">
+        <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+        <li><a href="{% url 'order:cart' %}">سبد خرید</a></li>
+        <li><a href="{% url 'order:checkout-order' %}">تسویه حساب</a></li>
+      </ul>
+      <!-- Breadcrumb End-->
+      <div class="row">
+        <!--Middle Part Start-->
+        <div id="content" class="col-sm-12">
+          <h1 class="title">تسویه حساب</h1>
+          <h2 class="subtitle"></h2>
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><i class="fa fa-book"></i> آدرس</h4>
+                </div>
+                  <div class="panel-body">
+                    <fieldset id="address" class="required">
+                      <div class="card-body">
+                        <p class="card-text"><strong>شهر</strong> : {{order.address.city}}</p>
+                        <p class="card-text"><strong>آدرس پستی</strong> : {{order.address.address}}</p>
+                        <p class="card-text"><strong>کد پستی</strong> : {{order.address.post_code}}</p>
+                        <p class="card-text"><a href="{% url 'order:address-order' %}">تغییر آدرس</a></p>
+                      </div>
+                    </fieldset>
+                  </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><i class="fa fa-ticket"></i> استفاده از کوپن تخفیف</h4>
+                </div>
+                <div class="panel-body">
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="input-coupon" placeholder="کد تخفیف خود را در اینجا وارد کنید" value="" name="coupon">
+                    <span class="input-group-btn">
+                    <input type="button" class="btn btn-primary" data-loading-text="بارگذاری ..." id="button-coupon" value="اعمال کوپن">
+                    </span></div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><i class="fa fa-gift"></i> استفاده از کارت هدیه</h4>
+                </div>
+                <div class="panel-body">
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="input-voucher" placeholder="کد کارت هدیه خود را در اینجا وارد کنید" value="" name="voucher">
+                    <span class="input-group-btn">
+                    <input type="submit" class="btn btn-primary" data-loading-text="بارگذاری ..." id="button-voucher" value="اعمال کارت هدیه">
+                    </span> </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <div class="row">
+                </div>
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title"><i class="fa fa-shopping-cart"></i> سبد خرید</h4>
+                    </div>
+                      <div class="panel-body">
+                        <div class="table-responsive">
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <td class="text-center">تصویر</td>
+                                <td class="text-left">نام محصول</td>
+                                <td class="text-left">تعداد</td>
+                                <td class="text-right">قیمت واحد</td>
+                                <td class="text-right">کل</td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for detail in details_orders %}
+                              <tr>
+                                <td class="text-center"><a href="{{detail.product.get_absolute_url}}"><img src="{{detail.product.image.url}}" alt="{{detail.product.title}}" title="{{detail.product.title}}" class="img-thumbnail" width="70px"></a></td>
+                                <td class="text-left"><a href="{{detail.product.get_absolute_url}}">{{detail.product.title}}</a></td>
+                                <td class="text-left"><div class="input-group btn-block" style="max-width: 200px;">
+                                    <input type="text" name="quantity" value="{{detail.count}}" size="1" class="form-control" readonly>
+                                    <span class="input-group-btn">
+                                    <a href="{% url 'order:delete_item' detail.id %}" type="button" data-toggle="tooltip" title="حذف" class="btn btn-danger" onClick=""><i class="fa fa-times-circle"></i></a>
+                                    </span></div></td>
+                                <td class="text-right">{{detail.product.price}}</td>
+                                <td class="text-right">{{detail.total_price_detail}}</td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <td class="text-right" colspan="4"><strong>جمع کل:</strong></td>
+                                <td class="text-right">{{order.total_price_order}}</td>
+                              </tr>
+                              <tr>
+                                <td class="text-right" colspan="4"><strong>هزینه ارسال ثابت :</strong></td>
+                                <td class="text-right">0</td>
+                              </tr>
+                              <tr>
+                                <td class="text-right" colspan="4"><strong>کسر هدیه:</strong></td>
+                                <td class="text-right">0</td>
+                              </tr>
+                              <tr>
+                                <td class="text-right" colspan="4"><strong>مالیات:</strong></td>
+                                <td class="text-right">0</td>
+                              </tr>
+                              <tr>
+                                <td class="text-right" colspan="4"><strong>کل :</strong></td>
+                                <td class="text-right">{{order.total_price_order}}</td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="buttons">
+            <div class="pull-right">
+              <button class="btn btn-primary">تکمیل خرید</button>
+            </div>
+          </div>
+        </div>
+        <!--Middle Part End -->
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
