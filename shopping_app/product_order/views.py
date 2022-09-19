@@ -73,7 +73,11 @@ def delete_item_order(request, item_id):
 
 @login_required
 def select_address(request):
-    order = Order.objects.get(owner_id=request.user.id, is_paid=False)
+    try:
+        order = Order.objects.get(owner_id=request.user.id, is_paid=False)
+    except:
+        return redirect("order:cart")
+
     addresses = request.user.useraddress_set.all()
 
     if request.POST:
@@ -94,10 +98,16 @@ def select_address(request):
 
 @login_required
 def checkout_order(request):
-    order = Order.objects.get(owner_id=request.user.id, is_paid=False)
-
+    try:
+        order = Order.objects.get(owner_id=request.user.id, is_paid=False)
+    except:
+        order = Order.objects.create(owner_id=request.user.id, is_paid=False)
+        
     details_orders = order.orderdetail_set.filter(
         order__owner=request.user, order__is_paid=False)
+
+    if not details_orders:
+        return redirect("order:cart")
 
     context = {
         'details_orders': details_orders,

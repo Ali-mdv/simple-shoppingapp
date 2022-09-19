@@ -40,8 +40,10 @@
                     </ul>
                   </div>
                 </li>
-                <li><a href="#">لیست علاقه مندی (0)</a></li>
-                <li><a href="checkout.html">تسویه حساب</a></li>
+                {% if request.user.is_authenticated %}
+                <li><a href="{% url 'users:wishlist' %}">لیست علاقه مندی</a></li>
+                <li><a href="{% url 'order:checkout-order' %}">تسویه حساب</a></li>
+                {% endif %}
               </ul>
             </div>
             <div id="language" class="btn-group">

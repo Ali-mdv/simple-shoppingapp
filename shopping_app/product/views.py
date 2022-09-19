@@ -155,7 +155,7 @@ def search_products(request, page=1):
             Q(title__icontains=search) |
             Q(description__icontains=search) |
             Q(category__title__icontains=search)
-        ).order_by(sorted_by or 'created')
+        ).order_by(sorted_by or 'created').distinct()
         # tag = Product.objects.filter(tag__title__icontains=search)
         # print(tag)
     paginator = Paginator(products, 25)  # Show 25 contacts per page.

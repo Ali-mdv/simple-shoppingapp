@@ -70,10 +70,10 @@
                 <h4><a href="{{product.get_absolute_url}}">{{product.title}}</a></h4>
                 <p class="price"> 
                   {% if product.is_special %}
-                      <span class="price-new">{{product.price}}</span> 
-                      <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+                      <span class="price-new"> {{product.get_total_price}} </span> 
+                      <span class="price-old"> {{product.price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
                   {% else %}
-                      <span class="price-new">{{product.price}}</span> 
+                      <span class="price-new"> {{product.price}} </span> 
                   {% endif %}
                 </p>
                 <div class="stars-outer">
@@ -121,8 +121,8 @@
                         <h4><a href="{{product.get_absolute_url}}">{{product.title}}</a></h4>
                         <p class="price"> 
                           {% if product.is_special %}
-                              <span class="price-new">{{product.price}}</span> 
-                              <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+                              <span class="price-new">{{product.get_total_price}}</span> 
+                              <span class="price-old"> {{product.price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
                           {% else %}
                               <span class="price-new">{{product.price}}</span> 
                           {% endif %}
@@ -167,8 +167,8 @@
               <h4><a href="{{product.get_absolute_url}}">{{product.title}}</a></h4>
               <p class="price"> 
                 {% if product.is_special %}
-                    <span class="price-new">{{product.price}}</span> 
-                    <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+                    <span class="price-new">{{product.get_total_price}}</span> 
+                    <span class="price-old"> {{product.price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
                 {% else %}
                     <span class="price-new">{{product.price}}</span> 
                 {% endif %}
@@ -200,8 +200,8 @@
                 <h4><a href="{{product.get_absolute_url}}">{{product.title}}</a></h4>
                 <p class="price"> 
                   {% if product.is_special %}
-                      <span class="price-new">{{product.price}}</span> 
-                      <span class="price-old"> {{product.get_total_price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+                      <span class="price-new">{{product.get_total_price}}</span> 
+                      <span class="price-old"> {{product.price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
                   {% else %}
                       <span class="price-new">{{product.price}}</span> 
                   {% endif %}
