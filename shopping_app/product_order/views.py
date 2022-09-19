@@ -1,15 +1,15 @@
 from django.http.response import Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse, reverse_lazy
+import requests
+from datetime import datetime
+from decouple import config
 from .forms import NewOrderFrom
 from .models import Order, OrderDetail
 from product.models import Product
 
-from django.http import HttpResponse
-import requests
-import json
 
-from datetime import datetime
 # Create your views here.
 
 
@@ -102,7 +102,7 @@ def checkout_order(request):
         order = Order.objects.get(owner_id=request.user.id, is_paid=False)
     except:
         order = Order.objects.create(owner_id=request.user.id, is_paid=False)
-        
+
     details_orders = order.orderdetail_set.filter(
         order__owner=request.user, order__is_paid=False)
 
@@ -117,85 +117,62 @@ def checkout_order(request):
     return render(request, 'order/checkout.html', context)
 
 
-MERCHANT = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
-ZP_API_REQUEST = "https://api.zarinpal.com/pg/v4/payment/request.json"
-ZP_API_VERIFY = "https://api.zarinpal.com/pg/v4/payment/verify.json"
-ZP_API_STARTPAY = "https://www.zarinpal.com/pg/StartPay/{authority}"
+@login_required
+def send_request(request):
+    if request.POST:
+        try:
+            order = Order.objects.get(owner_id=request.user.id, is_paid=False)
+        except:
+            return redirect("order:cart")
 
-description = "توضیحات مربوط به تراکنش را در این قسمت وارد کنید"  # Required
+        # send data to payment gateway(zarinpal)
+        params = {
+            "merchant_id": config("MERCHANT_ID"),
+            "amount": 150000,
+            "callback_url": request.build_absolute_uri(reverse("order:verify")),
+            "description": "خرید کالای از فروشگاه آنلاین شهر تاب",
+            # "metadata": {request.user.email, request.user.phonenumber, },
+        }
 
-# Important: need to edit for realy server.
-CallbackURL = 'http://localhost:8000/verify'
+        response = requests.post(
+            'https://api.zarinpal.com/pg/v4/payment/request.json', params)
+
+        if response.json()["data"]["code"] == 100:
+            authority = response.json()["data"]["authority"]
+            order.ref_id = authority
+            order.save()
+            return redirect(f'https://www.zarinpal.com/pg/StartPay/{authority}')
+
+        else:
+            return redirect("order:checkout-order")
 
 
 @login_required
-def send_request(request, *args, **kwags):
+def verify(request):
     try:
-        order = Order.objects.get(owner_id=request.user.id, is_paid=False)
+        order = Order.objects.get(
+            owner_id=request.user.id, ref_id=request.GET.get("Authority"))
     except:
-        raise Http404()
-
-    amount = order.total_price_order()
-    email = request.user.email  # Optional
-    mobile = '09123572710'  # Optional
-
-    req_data = {
-        "merchant_id": MERCHANT,
-        "amount": amount,
-        "callback_url": f'{CallbackURL}/{order.id}',
-        "description": description,
-        "metadata": {"mobile": mobile, "email": email}
-    }
-    req_header = {"accept": "application/json",
-                  "content-type": "application/json'"}
-    req = requests.post(url=ZP_API_REQUEST, data=json.dumps(
-        req_data), headers=req_header)
-    authority = req.json()['data']['authority']
-    if len(req.json()['errors']) == 0:
-        return redirect(ZP_API_STARTPAY.format(authority=authority))
-    else:
-        e_code = req.json()['errors']['code']
-        e_message = req.json()['errors']['message']
-        return HttpResponse(f"Error code: {e_code}, Error Message: {e_message}")
-
-
-def verify(request, *args, **kwags):
-    order_id = kwags.get('order_id')
-
-    t_status = request.GET.get('Status')
-    t_authority = request.GET['Authority']
-    if request.GET.get('Status') == 'OK':
-        req_header = {"accept": "application/json",
-                      "content-type": "application/json'"}
-        req_data = {
-            "merchant_id": MERCHANT,
-            "amount": amount,
-            "authority": t_authority
+        return redirect("order:cart")
+    if (request.GET.get("Status") == "OK"):
+        # send data to payment gateway to verify payment(zarinpal)
+        params = {
+            "merchant_id": config("MERCHANT_ID"),
+            "amount": 150000,
+            "authority": order.ref_id
         }
-        req = requests.post(url=ZP_API_VERIFY, data=json.dumps(
-            req_data), headers=req_header)
-        if len(req.json()['errors']) == 0:
-            t_status = req.json()['data']['code']
-            if t_status == 100:
-                order = Order.objects.get(id=order_id)
+        response = requests.post(
+            'https://api.zarinpal.com/pg/v4/payment/verify.json', params)
+
+        try:
+            if response.json()["data"]["code"] == 100:
                 order.is_paid = True
                 order.payment_date = datetime.now()
-                order.ref_if = req.json()['data']['ref_id']
                 order.save()
-                return HttpResponse('Transaction success.\nRefID: ' + str(
-                    req.json()['data']['ref_id']
-                ))
-            elif t_status == 101:
-                return HttpResponse('Transaction submitted : ' + str(
-                    req.json()['data']['message']
-                ))
-            else:
-                return HttpResponse('Transaction failed.\nStatus: ' + str(
-                    req.json()['data']['message']
-                ))
-        else:
-            e_code = req.json()['errors']['code']
-            e_message = req.json()['errors']['message']
-            return HttpResponse(f"Error code: {e_code}, Error Message: {e_message}")
-    else:
-        return HttpResponse('Transaction failed or canceled by user')
+        except:
+            pass
+
+    context = {
+        "order": order
+    }
+    return render(request, "order/verify_payment.html", context)

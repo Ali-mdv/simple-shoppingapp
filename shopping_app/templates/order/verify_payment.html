@@ -1,0 +1,35 @@
+{% extends 'components/_base.html' %}
+
+{% block title %}
+فروشگاه شهر تاب | رسید پرداخت
+{% endblock title %}
+
+
+{% block content %}
+<div id="container">
+  <div class="container">
+    <!-- Breadcrumb Start-->
+    <ul class="breadcrumb">
+      <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+      <li><a href="#">رسید پرداخت</a></li>
+    </ul>
+    <!-- Breadcrumb End-->
+    <h1 class="title">رسید پرداخت</h1><hr>
+    <div class="row">
+    <!--Middle Part Start-->
+      <div class="col-sm-12">
+        {% if order.is_paid %}
+        <p>پرداخت با موفقیت انجام شد.</p>
+        <p>تاریخ : {{order.jalali_date}}</p>
+        {% else %}
+        <p>پرداخت با موفقیت انجام نشد و اگر وجهی از حساب شما کسر شد حداکثر تا ۳ روز آینده به حساب شما برخواهد گشت.</p>
+        {% endif %}
+        <p>شناسه پرداخت : {{order.ref_id}}</p>
+      </div>
+    </div>
+      <!--Middle Part End -->
+  </div>
+</div>
+{% endblock content %}
+
+ 

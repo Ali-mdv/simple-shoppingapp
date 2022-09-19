@@ -129,7 +129,9 @@
           </div>
           <div class="buttons">
             <div class="pull-right">
-              <button class="btn btn-primary">تکمیل خرید</button>
+              <form action="{% url 'order:request' %}" method="post">{% csrf_token %}
+                <button class="btn btn-primary">انتقال به درگاه</button>
+              </form>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ from django.db import models
 from djmoney.models.fields import MoneyField
 from django.db.models.manager import Manager
 from django.core.exceptions import ObjectDoesNotExist
+import jdatetime
 from users.models import User, UserAddress
 from product.models import Product
 
@@ -22,7 +23,7 @@ class Order(models.Model):
     is_paid = models.BooleanField(default=False, verbose_name='پرداخت شده')
     payment_date = models.DateTimeField(
         verbose_name='تاریخ پرداخت', null=True, blank=True)
-    ref_if = models.CharField(
+    ref_id = models.CharField(
         max_length=100, null=True, blank=True, verbose_name='کد پیگیری')
     address = models.ForeignKey(
         UserAddress, blank=True, null=True, on_delete=models.SET_NULL, verbose_name='آدرس')
@@ -40,6 +41,9 @@ class Order(models.Model):
             total += detail.count * detail.price
 
         return total
+
+    def jalali_date(self):
+        return jdatetime.datetime.fromtimestamp(self.payment_date.timestamp())
 
     objects = OrderManager()
 

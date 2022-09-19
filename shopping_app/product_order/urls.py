@@ -12,5 +12,5 @@ urlpatterns = [
     path('checkout/', checkout_order, name='checkout-order'),
 
     path('request/', send_request, name='request'),
-    path('verify/<int:order_id>', verify, name='verify'),
+    path('verify/', verify, name='verify'),
 ]
