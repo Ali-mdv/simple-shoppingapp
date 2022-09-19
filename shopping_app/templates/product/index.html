@@ -104,7 +104,7 @@
         <!-- Banner End-->
         <!-- دسته ها محصولات Slider Start-->
         <div class="category-module" id="latest_category">
-          <h3 class="subtitle">محصولات - <a class="viewall" href="category.tpl">نمایش همه</a></h3>
+          <h3 class="subtitle">محصولات - <a class="viewall" href="{% url 'product:all_products' %}">نمایش همه</a></h3>
           <div class="category-module-content">
             <ul id="sub-cat" class="tabs">
               {% for cat in categories %}
@@ -158,7 +158,7 @@
         </div>
         <!-- Banner End -->
         <!-- دسته ها محصولات Slider Start -->
-        <h3 class="subtitle">محصولات منتخب - <a class="viewall" href="category.html">نمایش همه</a></h3>
+        <h3 class="subtitle">محصولات منتخب - <a class="viewall" href="#">نمایش همه</a></h3>
         <div class="owl-carousel latest_category_carousel">
           {% for product in top_rated_products %}
           <div class="product-thumb">
@@ -191,7 +191,7 @@
         </div>
         <!-- دسته ها محصولات Slider End -->
         <!-- Brand محصولات Slider Start-->
-        <h3 class="subtitle">محصولات پرفروش- <a class="viewall" href="category.html">نمایش همه</a></h3>
+        <h3 class="subtitle">محصولات پرفروش- <a class="viewall" href="#">نمایش همه</a></h3>
         <div class="owl-carousel latest_brands_carousel">
           {% for product in best_seller_products %}
             <div class="product-thumb">

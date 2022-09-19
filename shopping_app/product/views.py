@@ -29,7 +29,7 @@ def home_page(request):
         random_choices = random.sample(list(new_products), 6)
 
     top_rated_products = products.annotate(
-        avg_rating=Avg("ratings__average")).order_by('-avg_rating')[:7]
+        avg_rating=Avg("ratings__average")).order_by('-avg_rating')[:12]
 
     best_seller_products = products.order_by("-count_sold", "-price")[:12]
     context = {
@@ -46,17 +46,21 @@ def home_page(request):
 
 
 def products_list(request, page=1):
-    products = Product.objects.available().select_related(
-        "pattern", "body_color", "texture")
+    sorted_by = ""
+    if request.GET.get("sort") in ['price', '-price', 'ratings', '-ratings']:
+        sorted_by = request.GET.get("sort")
 
-    paginator = Paginator(products, 4)  # Show 4 contacts per page.
-    # page_number = request.GET.get('page')
+    products = Product.objects.available().prefetch_related(
+        "body_color", "mattress", "category").order_by(sorted_by or '-created')
+
+    paginator = Paginator(products, 20)  # Show 20 contacts per page.
     page_obj = paginator.get_page(page)
 
     context = {
-        'products': page_obj
+        'products': page_obj,
+        "sorted_by": sorted_by
     }
-    return render(request, 'product/products.html', context)
+    return render(request, 'product/product_list.html', context)
 
 
 def product_detail(request, uuid):
