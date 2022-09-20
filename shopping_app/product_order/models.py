@@ -1,5 +1,5 @@
 from django.db import models
-from djmoney.models.fields import MoneyField
+# from djmoney.models.fields import MoneyField
 from django.db.models.manager import Manager
 from django.core.exceptions import ObjectDoesNotExist
 import jdatetime
@@ -38,12 +38,29 @@ class Order(models.Model):
     def total_price_order(self):
         total = 0
         for detail in self.orderdetail_set.all():
-            total += detail.count * detail.price
-
+            total += detail.count * detail.product.price
         return total
 
+    def total_payment(self):
+        total = 0
+        for detail in self.orderdetail_set.all():
+            total += detail.count * detail.price
+        return total
+
+    def total_discount_order(self):
+        return self.total_price_order() - self.total_payment()
+
     def jalali_date(self):
-        return jdatetime.datetime.fromtimestamp(self.payment_date.timestamp())
+        if self.payment_date:
+            return jdatetime.datetime.fromtimestamp(self.payment_date.timestamp())
+
+    def change_count_sold(self):
+        if self.is_paid:
+            for detail in self.orderdetail_set.all():
+                detail.product.count_sold += 1
+                detail.product.number -= 1
+                detail.product.check_availability()
+                detail.product.save()
 
     objects = OrderManager()
 
@@ -53,8 +70,8 @@ class OrderDetail(models.Model):
         Order, on_delete=models.CASCADE, verbose_name='سبد خرید')
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, verbose_name='محصول')
-    price = MoneyField(verbose_name='قیمت', max_digits=9,
-                       decimal_places=0, default_currency='IRR')
+    price = models.DecimalField(
+        max_digits=11, decimal_places=0, verbose_name='قیمت')
     count = models.PositiveIntegerField(verbose_name='تعداد')
 
     class Meta:
@@ -65,4 +82,4 @@ class OrderDetail(models.Model):
         return self.product.title
 
     def total_price_detail(self):
-        return self.count * self.product.price
+        return self.count * self.product.get_total_price()

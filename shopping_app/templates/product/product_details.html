@@ -3,6 +3,8 @@
 {% load base_tags %}
 {% load crispy_forms_tags %}
 {% load ratings %}
+{% load custom_filters %}
+
 
 {% block title %}
 فروشگاه شهر تاب | {{product.title}}
@@ -41,7 +43,7 @@
                 <li><b>بافت :</b> <a href="#"><span itemprop="brand">{{product.get_texture}}</span></a></li>
                 <li><b>کد محصول :</b> <span itemprop="mpn">محصولات 17</span></li>
                 <li><b>وضعیت موجودی :</b> 
-                  <span class="{{ value|yesno:'instock,nostock' }}">{{ value|yesno:'موجود,عدم موجودی' }}</span>
+                  <span class="{{ product.status|yesno:'instock,nostock' }}">{{ product.status|yesno:'موجود,ناموجود' }}</span>
                 </li>
                 <li><b>امتیاز :</b> <span itemprop="mpn">
                   <div class="stars-outer">
@@ -52,10 +54,10 @@
               <ul class="price-box">
                 <li class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                   {% if product.is_special %}
-                    <span class="price-old">{{product.price}}</span> 
-                    <span itemprop="price">{{product.get_total_price}}<span itemprop="availability" content="موجود"></span></span>
+                    <span class="price-old">{{product.price|price}}</span> 
+                    <span itemprop="price">{{product.get_total_price|price}}<span itemprop="availability" content="موجود"></span></span>
                   {% else %}
-                    <span itemprop="price">{{product.price}}<span itemprop="availability" content="موجود"></span></span>
+                    <span itemprop="price">{{product.price|price}}<span itemprop="availability" content="موجود"></span></span>
                   {% endif %}
                 </li>
               </ul>
@@ -219,10 +221,10 @@
                   <h4><a href="{{product.get_absolute_url}}">{{product.title}}</a></h4>
                   <p class="price"> 
                     {% if product.is_special %}
-                        <span class="price-new">{{product.get_total_price}}</span> 
-                        <span class="price-old"> {{product.price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
+                        <span class="price-new">{{product.get_total_price|price}}</span> <br>
+                        <span class="price-old"> {{product.price|price}} </span> <span class="saving"> {{product.get_discount_percent}}٪- </span>
                     {% else %}
-                        <span class="price-new">{{product.price}}</span> 
+                        <span class="price-new">{{product.price|price}}</span> 
                     {% endif %}
                   </p>
                   <div class="stars-outer">

@@ -4,9 +4,9 @@ from .models import Order, OrderDetail
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('owner','is_paid','payment_date')
-    list_filter = ('owner','is_paid','payment_date')
-    search_fields = ('owner',)
+    list_display = ('owner','is_paid','jalali_date')
+    list_filter = ('is_paid','payment_date')
+    search_fields = ('owner','ref_id')
 admin.site.register(Order,OrderAdmin)
 
 

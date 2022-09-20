@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from colorfield.fields import ColorField
-from djmoney.models.fields import MoneyField
+# from djmoney.models.fields import MoneyField
 from django.utils.html import format_html
 from extentions.utils import change_image_size
 from django.contrib.humanize.templatetags.humanize import naturalday
@@ -16,7 +16,8 @@ from django.urls import reverse
 
 class ProductManager(models.Manager):
     def available(self):
-        return self.filter(status=True)
+        # return self.filter(status=True)
+        return self.order_by("-status")
         # return self.filter(number = True)
 
 
@@ -97,8 +98,10 @@ class Product(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     image = models.ImageField(upload_to='products', verbose_name='عکس')
     description = models.TextField(max_length=500, verbose_name='توضیحات')
-    price = MoneyField(verbose_name='قیمت', max_digits=9,
-                       decimal_places=0, default_currency='IRR')
+    # price = MoneyField(verbose_name='قیمت', max_digits=9,
+    #                    decimal_places=0, default_currency='IRR')
+    price = models.DecimalField(
+        max_digits=11, decimal_places=0, verbose_name='قیمت')
     body_color = models.ManyToManyField(Color, verbose_name='رنگ بدنه')
     mattress = models.ManyToManyField(Mattress, verbose_name="تشک")
     number = models.IntegerField(default=0, verbose_name='تعداد')
@@ -109,9 +112,10 @@ class Product(models.Model):
     hits = models.ManyToManyField(
         IPAdrees, blank=True, verbose_name='بازدید', editable=False)
     is_special = models.BooleanField(default=False, verbose_name='محصول ویژه')
-    discount = models.FloatField(default=0, verbose_name="تخفیف")
+    discount = models.DecimalField(
+        max_digits=3, decimal_places=2, default=0.0, verbose_name="تخفیف")
     count_sold = models.IntegerField(
-        default=0, verbose_name="تعداد فروخته شده", editable=False)
+        default=0, verbose_name="تعداد فروخته شده")
     ratings = GenericRelation(Rating, related_query_name='rate')
 
     class Meta:
@@ -151,10 +155,14 @@ class Product(models.Model):
         return self.category.get(category_type="T")
 
     def get_total_price(self):
-        return self.price - self.price * self.discount if self.is_special else self.price
+        return round(self.price - self.price * self.discount if self.is_special else self.price)
 
     def get_discount_percent(self):
-        return self.discount * 100
+        return round(self.discount * 100)
+
+    def check_availability(self):
+        if self.number <= 0:
+            self.status = False
 
     def get_absolute_url(self):
         return reverse('product:detail', args=[self.uuid])

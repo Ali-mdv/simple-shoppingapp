@@ -32,7 +32,7 @@ def add_order(request):
             count = 1
 
         order.orderdetail_set.create(
-            product_id=product.id, price=product.price, count=count)
+            product_id=product.id, price=product.get_total_price(), count=count)
         print(order.orderdetail_set.all())
     return redirect('product:detail', uuid=product.uuid)
 
@@ -49,7 +49,7 @@ def detail_cart(request):
 
     context = {
         'details_orders': details_orders,
-        'total': order.total_price_order,
+        'order': order,
     }
 
     return render(request, 'order/cart.html', context)
@@ -109,6 +109,9 @@ def checkout_order(request):
     if not details_orders:
         return redirect("order:cart")
 
+    if not order.address:
+        return redirect("order:address-order")
+
     context = {
         'details_orders': details_orders,
         'order': order,
@@ -128,7 +131,7 @@ def send_request(request):
         # send data to payment gateway(zarinpal)
         params = {
             "merchant_id": config("MERCHANT_ID"),
-            "amount": 150000,
+            "amount": order.total_payment(),
             "callback_url": request.build_absolute_uri(reverse("order:verify")),
             "description": "خرید کالای از فروشگاه آنلاین شهر تاب",
             # "metadata": {request.user.email, request.user.phonenumber, },
@@ -146,6 +149,8 @@ def send_request(request):
         else:
             return redirect("order:checkout-order")
 
+    return redirect("product:home")
+
 
 @login_required
 def verify(request):
@@ -158,7 +163,7 @@ def verify(request):
         # send data to payment gateway to verify payment(zarinpal)
         params = {
             "merchant_id": config("MERCHANT_ID"),
-            "amount": 150000,
+            "amount": order.total_payment(),
             "authority": order.ref_id
         }
         response = requests.post(
@@ -169,6 +174,7 @@ def verify(request):
                 order.is_paid = True
                 order.payment_date = datetime.now()
                 order.save()
+                order.change_count_sold()
         except:
             pass
 

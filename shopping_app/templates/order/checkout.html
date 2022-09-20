@@ -1,4 +1,5 @@
 {% extends 'components/_base.html' %}
+{% load custom_filters %}
 
 {% block title %}
 فروشگاه شهر تاب | سبد خرید
@@ -92,19 +93,23 @@
                                     <span class="input-group-btn">
                                     <a href="{% url 'order:delete_item' detail.id %}" type="button" data-toggle="tooltip" title="حذف" class="btn btn-danger" onClick=""><i class="fa fa-times-circle"></i></a>
                                     </span></div></td>
-                                <td class="text-right">{{detail.product.price}}</td>
-                                <td class="text-right">{{detail.total_price_detail}}</td>
+                                <td class="text-right">{{detail.product.price|price}}</td>
+                                <td class="text-right">{{detail.total_price_detail|price}}</td>
                               </tr>
                               {% endfor %}
                             </tbody>
                             <tfoot>
                               <tr>
                                 <td class="text-right" colspan="4"><strong>جمع کل:</strong></td>
-                                <td class="text-right">{{order.total_price_order}}</td>
+                                <td class="text-right">{{order.total_price_order|price}}</td>
                               </tr>
                               <tr>
                                 <td class="text-right" colspan="4"><strong>هزینه ارسال ثابت :</strong></td>
                                 <td class="text-right">0</td>
+                              </tr>
+                              <tr>
+                                <td class="text-right" colspan="4"><strong>تخفیف :</strong></td>
+                                <td class="text-right">{{order.total_discount_order|price}}</td>
                               </tr>
                               <tr>
                                 <td class="text-right" colspan="4"><strong>کسر هدیه:</strong></td>
@@ -116,7 +121,7 @@
                               </tr>
                               <tr>
                                 <td class="text-right" colspan="4"><strong>کل :</strong></td>
-                                <td class="text-right">{{order.total_price_order}}</td>
+                                <td class="text-right">{{ order.total_payment|price }}</td>
                               </tr>
                             </tfoot>
                           </table>

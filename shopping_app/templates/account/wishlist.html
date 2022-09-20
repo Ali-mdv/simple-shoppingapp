@@ -1,4 +1,5 @@
 {% extends 'components/_base.html' %}
+{% load custom_filters %}
 
 {% block title %}
 فروشگاه شهر تاب | لیست مورد علاقه
@@ -40,7 +41,7 @@
                 <td class="text-left">{{item.get_model}}</td>
                 <td class="text-left">{{item.get_texture}}</td>
                 <td class="text-right">موجود</td>
-                <td class="text-right"><div class="price"> {{item.price}} </div></td>
+                <td class="text-right"><div class="price"> {{item.price|price}} </div></td>
                 <td class="text-right">
                   <a class="btn btn-primary" href="{{item.get_absolute_url}}" title="" data-toggle="tooltip" onClick="cart.add('48');" data-original-title="مشاهده و خرید کالا">
                     <i class="fa fa-shopping-cart"></i>

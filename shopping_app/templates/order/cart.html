@@ -1,4 +1,6 @@
 {% extends 'components/_base.html' %}
+{% load custom_filters %}
+
 
 {% block title %}
 فروشگاه شهر تاب | سبد خرید
@@ -43,8 +45,8 @@
                       <button type="submit" data-toggle="tooltip" title="بروزرسانی" class="btn btn-primary"><i class="fa fa-refresh"></i></button>
                       <a href="{% url 'order:delete_item' detail.id %}" type="button" data-toggle="tooltip" title="حذف" class="btn btn-danger" onClick=""><i class="fa fa-times-circle"></i></a>
                       </span></div></td>
-                  <td class="text-right">{{detail.price}}</td>
-                  <td class="text-right">{{detail.total_price_detail}}</td>
+                  <td class="text-right">{{detail.price|price}}</td>
+                  <td class="text-right">{{detail.total_price_detail|price}}</td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -56,11 +58,11 @@
             <table class="table table-bordered">
               <tr>
                 <td class="text-right"><strong>جمع کل:</strong></td>
-                <td class="text-right">{{total}}</td>
+                <td class="text-right">{{order.total_price_order|price}}</td>
               </tr>
               <tr>
                 <td class="text-right"><strong>تخفیف:</strong></td>
-                <td class="text-right">0</td>
+                <td class="text-right">{{order.total_discount_order|price}}</td>
               </tr>
               <tr>
                 <td class="text-right"><strong>مالیات:</strong></td>
@@ -68,7 +70,7 @@
               </tr>
               <tr>
                 <td class="text-right"><strong>قابل پرداخت :</strong></td>
-                <td class="text-right">{{total}}</td>
+                <td class="text-right">{{order.total_payment|price}}</td>
               </tr>
             </table>
           </div>

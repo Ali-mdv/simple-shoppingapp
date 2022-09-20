@@ -20,9 +20,9 @@ class PropertyGalleryInline(admin.TabularInline):
 class PropertyAdmin(admin.ModelAdmin):
     list_display = ('title', 'image_tag', 'color_to_str',
                     'category_to_str', 'price', 'number', 'status', 'created_humanize')
-    list_filter = ('price', 'body_color', 'number',
-                   'status', 'created')
+    list_filter = ('body_color', 'status', 'created')
     search_fields = ('price', 'body_color', 'category_to_str')
+    readonly_fields = ('count_sold', )
     inlines = [PropertyGalleryInline, ]
 
 

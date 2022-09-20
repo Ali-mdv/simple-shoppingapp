@@ -52,7 +52,7 @@ LOCAL_APPS = [
 
 THIRD_PARTY_APPS = [
     'colorfield',
-    'djmoney',
+    # 'djmoney',
     'phonenumber_field',
     'widget_tweaks',
     'django_render_partial',
