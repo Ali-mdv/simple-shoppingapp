@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.manager import Manager
 from django.core.exceptions import ObjectDoesNotExist
 import jdatetime
+from django.urls import reverse_lazy
 from users.models import User, UserAddress
 from product.models import Product
 
@@ -61,6 +62,9 @@ class Order(models.Model):
                 detail.product.number -= 1
                 detail.product.check_availability()
                 detail.product.save()
+
+    def get_absolute_url(self):
+        return reverse_lazy("order:order-single", args=[self.ref_id, ])
 
     objects = OrderManager()
 

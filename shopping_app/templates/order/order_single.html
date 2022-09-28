@@ -1,0 +1,67 @@
+{% extends 'components/_base.html' %}
+{% load custom_filters %}
+
+
+{% block title %}
+فروشگاه شهر تاب | جزییات سفارش
+{% endblock title %}
+
+
+{% block content %}
+<div id="container">
+  <div class="container">
+    {% if details_order %}
+    <!-- Breadcrumb Start-->
+    <ul class="breadcrumb">
+      <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+      <li><a href="{% url 'order:order-list' %}">سفارشات پیشین من</a></li>
+      <li><a href="{% url 'order:order-single' order.ref_id %}">جزییات سفارش</a></li>
+    </ul>
+    <!-- Breadcrumb End-->
+    <div class="row">
+      <!--Middle Part Start-->
+      <div id="content" class="col-sm-12">
+        <h1 class="title">جزییات سفارش</h1>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <td class="text-center">تصویر</td>
+                  <td class="text-left">نام محصول</td>
+                  <td class="text-left">مدل</td>
+                  <td class="text-left">تعداد</td>
+                  <td class="text-right">قیمت واحد</td>
+                  <td class="text-right">قیمت کل</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% for detail in details_order %}
+                <tr>
+                  <td class="text-center"><a href="{{detail.product.get_absolute_url}}"><img src="{{detail.product.image.url}}" alt="{{detail.product.title}}" title="{{detail.product.title}}" class="img-thumbnail" width="70px"/></a></td>
+                  <td class="text-left"><a href="{{detail.product.get_absolute_url}}">{{detail.product.title}}</a><br />
+                  <td class="text-left">{{detail.product.get_model}}|{{detail.product.get_texture}}</td>
+                  <td class="text-left"><div class="input-group btn-block quantity">
+                      <input type="text" name="quantity" value="{{detail.count}}" size="1" class="form-control" readonly/>
+                      <span class="input-group-btn">
+                      </span></div></td>
+                  <td class="text-right">{{detail.price|price}}</td>
+                  <td class="text-right">{{detail.total_price_detail|price}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+      </div>
+      <!--Middle Part End -->
+    </div>
+  </div>
+  {% else %}
+  <div class="alert alert-warning">
+    <p>سبد خرید شما خالیست.</p>
+    <p>برای ادامه خرید <a href="{% url 'product:home' %}">کلیک </a>کنید.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}
+
+ 

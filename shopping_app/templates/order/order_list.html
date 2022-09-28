@@ -1,0 +1,63 @@
+{% extends 'components/_base.html' %}
+{% load custom_filters %}
+
+{% block title %}
+فروشگاه شهر تاب | سفارشات پیشین من
+{% endblock title %}
+
+{% block content %}
+<div id="container">
+  <div class="container">
+    <!-- Breadcrumb Start-->
+    <ul class="breadcrumb">
+      <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+      <li><a href="{% url 'users:profile' %}">حساب کاربری</a></li>
+      <li><a href="{% url 'order:order-list' %}">سفارشات پیشین من</a></li>
+    </ul>
+    <!-- Breadcrumb End-->
+    <div class="row">
+      <!--Middle Part Start-->
+      {% if orders %}
+      <div id="content" class="col-sm-12">
+        <h1 class="title">لیست سفارشات پیشین</h1>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <td class="text-left">عنوان</td>
+                <td class="text-left">تاریخ پرداخت</td>
+                <td class="text-left">کد پیگیری</td>
+                <td class="text-right">مبلغ پرداخت شده</td>
+                <td class="text-right">آدرس</td>
+                <td class="text-right">عملیات</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in orders %}
+              <tr>
+                <td class="text-left">{{forloop.counter}}</td>
+                <td class="text-left">{{item.jalali_date}}</td>
+                <td class="text-left">{{item.ref_id}}</td>
+                <td class="text-right">{{item.total_payment|price}}</td>
+                <td class="text-right">{{item.address.address}}</td>
+                <td class="text-right">
+                  <a class="btn btn-primary" href="{{item.get_absolute_url}}" title="" data-toggle="tooltip" onClick="cart.add('48');" data-original-title="مشاهده سفارش">
+                    <i class="fa fa-shopping-cart"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% else %}
+      <div class="alert alert-warning">
+        <p>شما تا به حال خریدی از سایت ما نداشته اید.</p>
+        <p>برای ثبت اولین خرید خود <a href="{% url 'product:home' %}">کلیک </a>کنید.</p>
+      {% endif %}
+      <!--Middle Part End -->
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -14,7 +14,7 @@ from product.models import Product
 
 
 @login_required
-def add_order(request):
+def add_item_order(request):
     new_order_form = NewOrderFrom(request.POST or None)
 
     if new_order_form.is_valid():
@@ -33,7 +33,6 @@ def add_order(request):
 
         order.orderdetail_set.create(
             product_id=product.id, price=product.get_total_price(), count=count)
-        print(order.orderdetail_set.all())
     return redirect('product:detail', uuid=product.uuid)
 
 
@@ -57,7 +56,6 @@ def detail_cart(request):
 
 @login_required
 def delete_item_order(request, item_id):
-    next = request.GET.get("next")
     try:
         # order = request.user.order_set.get(orderdetail__id=item_id)
         order_detail = OrderDetail.objects.get(
@@ -69,6 +67,32 @@ def delete_item_order(request, item_id):
         raise Http404('چنین محصولی در سبد خرید شما وجود ندارد.')
 
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def order_list(request):
+    orders = Order.objects.filter(owner=request.user, is_paid=True)
+    context = {
+        "orders": orders
+    }
+    return render(request, "order/order_list.html", context)
+
+
+@login_required
+def order_single(request, ref_id):
+    try:
+        order = Order.objects.get(owner=request.user, ref_id=ref_id)
+    except:
+        return redirect('order:order-list')
+
+    details_order = order.orderdetail_set.all()
+
+    context = {
+        'details_order': details_order,
+        'order': order,
+    }
+
+    return render(request, 'order/order_single.html', context)
 
 
 @login_required
