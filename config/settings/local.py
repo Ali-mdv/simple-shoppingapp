@@ -19,6 +19,21 @@ MIDDLEWARE += [
 ]
 
 
+# DATABASE
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config("POSTGRES_DB"),
+        'USER': config("POSTGRES_USER"),
+        'HOST': 'localhost',
+        'PORT': config("POSTGRES_PORT"),
+        'PASSWORD': config("POSTGRES_PASSWORD")
+    }
+}
+
+
 # djangi-debug_toolbar
 # ------------------------------------------------------------------------------
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
