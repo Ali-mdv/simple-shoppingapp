@@ -16,7 +16,6 @@
             <h5>اطلاعات</h5>
             <ul>
               <li><a href="{% url 'contact:about_us' %}">درباره ما</a></li>
-              <li><a href="{% url 'contact:about_us' %}">شرایط و قوانین</a></li>
               <li><a href="{% url 'contact:faq' %}">سوالات متداول</a></li>
             </ul>
           </div>
@@ -27,21 +26,26 @@
             </ul>
           </div>
           <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
-            <h5>امکانات جانبی</h5>
-            <ul>
-              <li><a href="#">برند ها</a></li>
-              <li><a href="#">کارت هدیه</a></li>
-              <li><a href="#">بازاریابی</a></li>
-              <li><a href="#">ویژه ها</a></li>
-            </ul>
-          </div>
-          <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
             <h5>حساب من</h5>
             <ul>
               <li><a href="{% url 'users:profile' %}">حساب کاربری</a></li>
               <li><a href="{% url 'order:order-list' %}">تاریخچه سفارشات</a></li>
               <li><a href="{% url 'users:wishlist' %}">لیست علاقه مندی</a></li>
             </ul>
+          </div>
+          <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
+            <h5>همراه ما باشید</h5>
+            <div class="social pull-right"> 
+              <a href="#" target="_blank"> 
+                <img data-toggle="tooltip" src="{% static '/product/image/socialicons/telegram.png' %}" alt="Telegram" title="Telegram">
+              </a> 
+              <a href="#" target="_blank"> 
+                <img data-toggle="tooltip" src="{% static '/product/image/socialicons/instagram.png' %}" alt="Instagram" title="Instagram"> 
+              </a> 
+              <a href="#" target="_blank"> 
+                <img data-toggle="tooltip" src="{% static '/product/image/socialicons/whatsapp.png' %}" alt="Whatsapp" title="Whatsapp"> 
+              </a> 
+            </div>
           </div>
         </div>
       </div>
@@ -50,18 +54,11 @@
       <div class="container">
         <div id="powered" class="clearfix">
           <div class="powered_text pull-left flip">
-            <p>shahre-taab.com - 2022 © Copyright</p>
+            <p> 2022-2023 © </p>
           </div>
-          <div class="social pull-right flip"> 
-            <a href="#" target="_blank"> <img data-toggle="tooltip" src="{% static '/product/image/socialicons/facebook.png' %}" alt="Facebook" title="Facebook"></a> 
-            <a href="#" target="_blank"> <img data-toggle="tooltip" src="{% static '/product/image/socialicons/twitter.png' %}" alt="Twitter" title="Twitter"> </a> 
-            <a href="#" target="_blank"> <img data-toggle="tooltip" src="{% static '/product/image/socialicons/google_plus.png' %}" alt="Google+" title="Google+"> </a> 
-            <a href="#" target="_blank"> <img data-toggle="tooltip" src="{% static '/product/image/socialicons/pinterest.png' %}" alt="Pinterest" title="Pinterest"> </a> 
-            <a href="#" target="_blank"> <img data-toggle="tooltip" src="{% static '/product/image/socialicons/rss.png' %}" alt="RSS" title="RSS"> </a> </div>
-        </div>
         <div class="bottom-row">
           <div class="custom-text text-center">
-            <p>برای استفاده از مطالب فروشگاه شهر تاب، داشتن «هدف غیرتجاری» و ذکر «منبع» کافیست. تمام حقوق اين وب‌سايت نیز برای این فروشگاه آنلاین است است.</p>
+            <p>برای استفاده از مطالب فروشگاه شهر تاب، داشتن «هدف غیرتجاری» و ذکر «منبع» کافیست. تمام حقوق اين وب‌سايت نیز برای فروشگاه مارکت تاب می باشد.</p>
           </div>
         </div>
       </div>

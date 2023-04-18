@@ -1,6 +1,6 @@
 from django import forms
 from .models import User, UserAddress
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from phonenumber_field.formfields import PhoneNumberField
 from django.core.exceptions import ValidationError
 
@@ -51,9 +51,25 @@ class RegisterForm(forms.Form):
         return data
 
 
+class CustomAuthenticationForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': 'آدرس ایمیل یا رمز عبور اشتباه است.\nلطفا ایمیل و رمز عبور معتبر وارد نمایید.',
+    }
+
+
 class ProfileForm(forms.ModelForm):
-    email = forms.EmailField(max_length=200)
-    phonenumber = PhoneNumberField(region="IR")
+    email = forms.EmailField(
+        label="ایمیل",
+        max_length=200,
+    )
+    phonenumber = PhoneNumberField(
+        label="شماره همراه",
+        region="IR",
+        help_text='شماره تلفن باید در قالب «09121234567» وارد شود. حداکثر 15 رقم مجاز است.'
+    )
+    # cumtomize phonenumberfield error
+    phonenumber.error_messages[
+        'invalid'] = "یک شماره تلفن معتبر وارد کنید (به عنوان مثال «09121234567» یا «989121234567»)."
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
@@ -74,9 +90,18 @@ class ProfileForm(forms.ModelForm):
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(
-        label="ایمیل", max_length=200, help_text='Required')
+        label="ایمیل",
+        max_length=200,
+        help_text='الزامی. یک آدرس ایمیل معتبر وارد کنید.'
+    )
     phonenumber = PhoneNumberField(
-        label="شماره همراه", region="IR", help_text='Required')
+        label="شماره همراه",
+        region="IR",
+        help_text='الزامی. شماره تلفن باید در قالب «09121234567» وارد شود. حداکثر 15 رقم مجاز است.'
+    )
+    # cumtomize phonenumberfield error
+    phonenumber.error_messages[
+        'invalid'] = "یک شماره تلفن معتبر وارد کنید (به عنوان مثال «09121234567» یا «989121234567»)."
 
     class Meta:
         model = User
@@ -84,6 +109,19 @@ class SignupForm(UserCreationForm):
 
 
 class UserAddressForm(forms.ModelForm):
+    city = forms.CharField(
+        label="شهر",
+        max_length=50,
+    )
+    address = forms.CharField(
+        label="آدرس",
+        max_length=155,
+        help_text='آدرس معتبر و کامل وارد نمایید.'
+    )
+    post_code = forms.CharField(
+        label="کد پستی",
+        max_length=20,
+    )
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
@@ -95,4 +133,3 @@ class UserAddressForm(forms.ModelForm):
     def clean(self):
         if self.user.useraddress_set.count() >= 3:
             raise ValidationError("ثبت بیش از ۳ آدرس امکانپذیر نیست.")
-

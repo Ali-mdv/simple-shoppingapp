@@ -15,7 +15,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 
-from .forms import ProfileForm, SignupForm, UserAddressForm
+from .forms import CustomAuthenticationForm, ProfileForm, SignupForm, UserAddressForm
 from .tokens import account_activation_token
 from product.models import Product
 
@@ -43,6 +43,7 @@ from product.models import Product
 # ===========================================================================================
 
 class CustomLoginView(LoginView):
+    authentication_form = CustomAuthenticationForm
     redirect_authenticated_user = True
     # def get_success_url(self):
     #     user = self.request.user
