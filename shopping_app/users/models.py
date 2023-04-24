@@ -48,6 +48,11 @@ class UserWishList(models.Model):
     def __str__(self):
         return self.user.username
 
+    def contains(self, product_id):
+        if (self.items.filter(pk=product_id).exists()):
+            return True
+        return False
+
     def items_to_str(self):
         return ", ".join([item.title for item in self.items.all()])
     items_to_str.short_description = "اقلام"

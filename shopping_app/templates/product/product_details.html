@@ -90,9 +90,10 @@
                 </form>
                 <div class="cart">
                   <div>
-                    <form action="{% url 'users:wishlist-add' %}" method="post">{% csrf_token %}
+                    <form id="wishlist-add" action="{% url 'users:wishlist-add' %}" method="post">{% csrf_token %}
                       <input type="hidden" name="product_id" value="{{product.id}}">
-                      <button type="submit" class="wishlist" onClick=""><i class="fa fa-heart"></i> افزودن به علاقه مندی ها</button>
+                      <button type="submit" class="wishlist" onClick=""><i id="wishlist-icon" class="fa fa-heart"></i> افزودن به علاقه مندی ها</button>
+                      <span id="wishlist-message" class="alert-info"></span>
                     </form>
                     <br />
                   </div>
@@ -231,13 +232,6 @@
                     <div class="stars-inner">{{product.ratings.get.average}}</div>
                   </div>
                 </div>
-                <div class="button-group">
-                  <button class="btn-primary" type="button" onClick=""><span>افزودن به سبد</span></button>
-                  <div class="add-to-links">
-                    <button type="button" data-toggle="tooltip" title="افزودن به علاقه مندی" onClick=""><i class="fa fa-heart"></i></button>
-                    <button type="button" data-toggle="tooltip" title="افزودن به مقایسه" onClick=""><i class="fa fa-exchange"></i></button>
-                  </div>
-                </div>
               </div>
             {% endfor %}
           </div>
@@ -294,5 +288,26 @@ $("#zoom_01").bind("click", function(e) {
   $.swipebox(ez.getGalleryList());
   return false;
 });
+
+$(document).ready(function() {
+  $('#wishlist-add').on('submit', function(event) {
+    event.preventDefault();
+    $.ajax({
+        url: '{% url "users:wishlist-add" %}',
+        type: 'POST',
+        headers: {'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()},
+        data: $('#wishlist-add').serialize(),
+        success: function(data) {
+          if(data.success){
+            $('#wishlist-icon').css("color", "red");
+            $('#wishlist-message').html('محصول به لیست علاقه مندی اضافه شد.').css('color',"green")
+          }else{
+            $('#wishlist-message').html(data.error).css('color','red')
+          }
+        }
+    });
+  });
+});
 </script>
 {% endblock javascript %}
+

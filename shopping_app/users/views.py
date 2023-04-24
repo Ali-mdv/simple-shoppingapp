@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, get_user_model
+# from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import AuthenticationForm
+# from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .models import User, UserAddress, UserWishList
 from django.urls import reverse_lazy, reverse
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -17,6 +17,7 @@ from django.core.mail import EmailMessage
 
 from .forms import CustomAuthenticationForm, ProfileForm, SignupForm, UserAddressForm
 from .tokens import account_activation_token
+from .models import User, UserAddress, UserWishList
 from product.models import Product
 
 # Create your views here.
@@ -180,22 +181,28 @@ class UserWishListView(LoginRequiredMixin, ListView):
         return products
 
 
-@login_required
+@csrf_exempt
 def add_item_wishlist(request):
-    try:
-        product = Product.objects.get(pk=request.POST.get("product_id"))
-        wish_list = UserWishList.objects.get(user=request.user)
-        wish_list.items.add(product)
-    except:
-        pass
-    return redirect(request.META.get('HTTP_REFERER'))
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            wish_list = UserWishList.objects.get(user=request.user)
+            if (wish_list.contains(request.POST.get("product_id"))):
+                return JsonResponse({'success': False, 'error': 'محصول در لیست علاقه مندی وجود دارد.'})
+
+            product = Product.objects.get(pk=request.POST.get("product_id"))
+            wish_list.items.add(product)
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'error': 'وارد حساب کاربری خود نشده اید.'})
+    else:
+        return JsonResponse({'success': False, 'error': 'درخواست اشتباه است.'})
 
 
-@login_required
-def remove_item_wishlist(request, pk):
-    try:
-        wish_list = UserWishList.objects.get(user=request.user)
-        wish_list.items.remove(Product.objects.get(pk=pk))
-    except:
-        pass
-    return redirect("users:wishlist")
+@csrf_exempt
+def remove_item_wishlist(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            wish_list = UserWishList.objects.get(user=request.user)
+            product = Product.objects.get(pk=request.POST.get("product_id"))
+            wish_list.items.remove(product)
+            return JsonResponse({'success': True})

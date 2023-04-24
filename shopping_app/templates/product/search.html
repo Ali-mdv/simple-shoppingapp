@@ -85,15 +85,6 @@
                       <div class="stars-inner">{{product.ratings.get.average}}</div>
                     </div>
                   </div>
-                  <div class="button-group">
-                    <div class="add-to-links">
-                      <form action="{% url 'users:wishlist-add' %}" method="post">{% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{product.id}}">
-                        <button type="submit" data-toggle="tooltip" title="افزودن به علاقه مندی" onClick=""><i class="fa fa-heart"></i></button>
-                      </form>
-                      <button type="button" data-toggle="tooltip" title="مقایسه این محصول" onClick=""><i class="fa fa-exchange"></i> <span>مقایسه این محصول</span></button>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
