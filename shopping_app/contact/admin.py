@@ -5,7 +5,7 @@ from .models import ContactUs
 
 class ContactUsAdmin(admin.ModelAdmin):
     list_display = ('name','email','subject','is_checked')
-    list_filter = ('subject','is_checked')
+    list_filter = ('is_checked',)
     search_fields = ('name','email','subject','text')
     list_editable = ('is_checked',)
 

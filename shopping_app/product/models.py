@@ -200,6 +200,8 @@ class Comment(models.Model):
     status = models.BooleanField(default=False, verbose_name="وضعیت")
 
     class Meta:
+        verbose_name = 'دیدگاه'
+        verbose_name_plural = 'دیدگاه ها'
         unique_together = ['user', 'product']
 
     def __str__(self):

@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
-# from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.views import LoginView
-# from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
@@ -23,26 +21,6 @@ from product.models import Product
 # Create your views here.
 
 
-# def register(request):
-# 	User = get_user_model()
-
-# 	form_class = RegisterForm(request.POST or None)
-
-# 	if form_class.is_valid():
-# 		username = form_class.cleaned_data.get('username')
-# 		email = form_class.cleaned_data.get('email')
-# 		password = form_class.cleaned_data.get('password1')
-# 		print(form_class.cleaned_data)
-# 		user = User.objects.create_user(username=username,email=email,password=password)
-
-# 	context = {
-# 		'form' : form_class,
-# 	}
-
-# 	return render(request, 'users/register.html',context)
-
-# ===========================================================================================
-
 class CustomLoginView(LoginView):
     authentication_form = CustomAuthenticationForm
     redirect_authenticated_user = True
@@ -52,26 +30,6 @@ class CustomLoginView(LoginView):
     #         return reverse('product:home')
     #     else:
     #         return reverse('login')
-
-
-# def navbar_login(request, *args, **kwargs):
-#     form_class = AuthenticationForm(request, request.POST or None)
-
-#     if form_class.is_valid():
-#         print(form_class.cleaned_data)
-#         username = form_class.cleaned_data.get('username')
-#         password = form_class.cleaned_data.get('password')
-#         user = authenticate(request, username=username, password=password)
-
-#         if not user is None:
-#             login(request, user)
-#             form_class = AuthenticationForm()
-
-#     context = {
-#         'form': form_class,
-#     }
-
-#     return render(request, 'product/navbar.html', context)
 
 
 class Profile(LoginRequiredMixin, UpdateView):
@@ -125,8 +83,6 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        # login(request, user)
-        # return redirect('home')
         return HttpResponse('<p>Thank you for your email confirmation. Now you can login your account.</p>\n<p><a href="/login">login</a></p>')
     else:
         return HttpResponse('Activation link is invalid!')

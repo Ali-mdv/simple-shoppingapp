@@ -13,10 +13,12 @@ UserAdmin.fieldsets[1][1]['fields'] = (
 @admin.register(UserAddress)
 class UserAddressAdmin(admin.ModelAdmin):
     list_display = ("user", "city", "address", "post_code")
-    search_fields = ("user", "address", "post_code")
+    search_fields = ('user__username', 'user__email',
+                     'user__phonenumber', "address", "post_code")
 
 
 @admin.register(UserWishList)
 class UserWishListAdmin(admin.ModelAdmin):
     list_display = ("user", "items_to_str")
-    search_fields = ("user",)
+    search_fields = ('user__username', 'user__email',
+                     'user__phonenumber',)

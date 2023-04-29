@@ -79,7 +79,8 @@ def product_detail(request, uuid):
     comment_form = CommentModelForm(
         instance=comment)  # fill user comment in form
 
-    if (request.POST):  # create or update comment in send post request
+    # create or update comment in send post request
+    if (request.POST and request.user.is_authenticated):
         comment_form = CommentModelForm(request.POST)
         if comment_form.is_valid():
             try:  # if score from UserRating model(TPP) not exist raise error

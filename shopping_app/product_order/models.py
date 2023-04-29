@@ -34,7 +34,7 @@ class Order(models.Model):
         verbose_name_plural = 'سبد های خرید کاربران'
 
     def __str__(self):
-        return self.owner.get_full_name()
+        return f'{self.owner.username} | {self.id}'
 
     def total_price_order(self):
         total = 0
@@ -54,6 +54,7 @@ class Order(models.Model):
     def jalali_date(self):
         if self.payment_date:
             return jdatetime.datetime.fromtimestamp(self.payment_date.timestamp())
+    jalali_date.short_description = "تاریخ"
 
     def change_count_sold(self):
         if self.is_paid:
