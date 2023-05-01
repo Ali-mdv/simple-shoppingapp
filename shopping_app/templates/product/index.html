@@ -99,14 +99,14 @@
           <h3 class="subtitle">محصولات - <a class="viewall" href="{% url 'product:all_products' %}">نمایش همه</a></h3>
           <div class="category-module-content">
             <ul id="sub-cat" class="tabs">
-              {% for cat in categories %}
-              <li><a href="#{{cat.slug}}">{{cat.title}}</a></li>
+              {% for design in relax_swing_designs %}
+              <li><a href="#{{design.slug}}">{{design.title}}</a></li>
               {% endfor %}
             </ul>
-            {% for cat in categories %}
-            <div id="{{cat.slug}}" class="tab_content">
+            {% for design in relax_swing_designs %}
+            <div id="{{design.slug}}" class="tab_content">
                 <div class="owl-carousel latest_category_tabs">
-                  {% for product in cat.product_set.all|slice:":10" %}
+                  {% for product in design.product_set.all|slice:":10" %}
                     <div class="product-thumb">
                       <div class="image"><a href="{{product.get_absolute_url}}"><img src="{{product.image.url}}" alt="{{product.title}}" title="{{product.title}}" class="img-responsive" /></a></div>
                       <div class="caption">

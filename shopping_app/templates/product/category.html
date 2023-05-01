@@ -2,7 +2,7 @@
 {% load custom_filters %}
 
 {% block title %}
-فروشگاه شهر تاب | {{category.title}}
+فروشگاه شهر تاب | {{category.parent.title}} {{category.title}}
 {% endblock %}
 
 
@@ -12,6 +12,9 @@
     <!-- Breadcrumb Start-->
     <ul class="breadcrumb">
       <li><a href="{% url 'product:home' %}"><i class="fa fa-home"></i></a></li>
+      {% if category.parent %}
+      <li><a href="{% url 'product:category_products' category.parent.slug %}">{{category.parent.title}}</a></li>
+      {% endif %}
       <li><a href="{% url 'product:category_products' category.slug %}">{{category.title}}</a></li>
     </ul>
     <!-- Breadcrumb End-->
@@ -21,7 +24,9 @@
       <!--Left Part End -->
       <!--Middle Part Start-->
       <div id="content" class="col-sm-9">
-        <h1 class="title">{{category.show_type}} {{category.title}}</h1>
+        <h1 class="title">
+          {{category.parent.title}} {{category.title}}
+        </h1>
         <h3 class="subtitle">محصولات پیشنهادی</h3>
         <div class="category-list-thumb row">
           {% for product in suggested_products %}

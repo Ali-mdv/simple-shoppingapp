@@ -7,15 +7,20 @@ register = template.Library()
 
 @register.inclusion_tag('template_tags/category_aside.html')
 def category_aside():
+    try:
+        relax_swing = Category.objects.get(slug="relax_swing")
+        children_relax_swing = relax_swing.children.all()
+    except:
+        children_relax_swing = Category.objects.none()
     return {
-        "categories": Category.objects.filter(category_type="M")
+        "categories": children_relax_swing
     }
 
 
 @register.inclusion_tag('template_tags/category_header.html')
 def category_header():
     return {
-        "categories": Category.objects.filter(category_type="S")
+        "categories": Category.objects.filter(is_parent=True)
     }
 
 

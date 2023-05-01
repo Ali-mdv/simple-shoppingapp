@@ -16,8 +16,9 @@ urlpatterns = [
 
     path('detail/<uuid:uuid>', product_detail, name='detail'),
 
-    path('category/<slug:slug>', category_product_list, name='category_products'),
-    path('category/<slug:slug>/<int:page>',
+    path('category/<slug:cat_slug>',
+         category_product_list, name='category_products'),
+    path('category/<slug:cat_slug>/<int:page>',
          category_product_list, name='category_products'),
 
     path('search/', search_products, name='search_products'),

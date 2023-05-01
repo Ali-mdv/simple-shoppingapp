@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Q, Avg
 import random
-from .models import Product, ProductGallery, Category, Comment
+from .models import Product, ProductGallery, Category, Design, Comment
 from product_slider.models import Slider
 from product_order.forms import NewOrderFrom
 from .forms import CommentModelForm
@@ -16,12 +16,12 @@ from star_ratings.models import UserRating
 def home_page(request):
     slider_items = Slider.objects.all()
 
-    products = Product.objects.available().prefetch_related("category", "body_color")
+    products = Product.objects.available().prefetch_related(
+        "body_color").select_related('category', 'design')
 
-    categories = Category.objects.filter(category_type="T")
+    relax_swing_designs = Design.objects.filter(category__slug='relax_swing')
 
     new_products = products.order_by('-created')[:7]
-    # new_products_grouper = mygrouper(4, new_products)
 
     # If the length of the products is less than 6 dont raise an error
     random_choices = None
@@ -34,12 +34,11 @@ def home_page(request):
     best_seller_products = products.order_by("-count_sold", "-price")[:12]
     context = {
         'slider_items': slider_items,
-        # 'new_products_grouper': new_products_grouper,
         'new_products': new_products,
         'top_rated_products': top_rated_products,
         'random_choices': random_choices,
         'best_seller_products': best_seller_products,
-        'categories': categories
+        'relax_swing_designs': relax_swing_designs
     }
 
     return render(request, 'product/index.html', context)
@@ -51,7 +50,7 @@ def products_list(request, page=1):
         sorted_by = request.GET.get("sort")
 
     products = Product.objects.available().prefetch_related(
-        "body_color", "mattress", "category").order_by(sorted_by or '-created')
+        "body_color").select_related('category', 'design').order_by(sorted_by or '-created')
 
     paginator = Paginator(products, 20)  # Show 20 contacts per page.
     page_obj = paginator.get_page(page)
@@ -67,7 +66,7 @@ def product_detail(request, uuid):
     product = get_object_or_404(Product, uuid=uuid)
     product_gallery = ProductGallery.objects.filter(product_id=product.id)
     similar_products = Product.objects.filter(
-        Q(category=product.get_model().id) and Q(category=product.get_texture().id))[0:6]
+        Q(category=product.category.id) and Q(category=product.design.id))[0:6]
 
     try:  # get user comment if exist
         comment = Comment.objects.get(user=request.user, product=product)
@@ -119,15 +118,21 @@ def product_detail(request, uuid):
     return render(request, 'product/product_details.html', context)
 
 
-def category_product_list(request, slug, page=1):
+def category_product_list(request, cat_slug, page=1):
     sorted_by = ""
     if request.GET.get("sort") in ['price', '-price', 'ratings', '-ratings']:
         sorted_by = request.GET.get("sort")
 
-    category = get_object_or_404(Category, slug=slug, status=True)
+    category = get_object_or_404(Category, slug=cat_slug, status=True)
 
-    products = Product.objects.filter(category=category).prefetch_related(
-        "body_color", "mattress", "category").order_by(sorted_by or '-created')
+    # if category is parent show all product from those childern of parent
+    if (category.is_parent):
+        categories = category.children.filter(status=True)
+        products = Product.objects.filter(category__in=categories).prefetch_related(
+            "body_color").select_related("category", "design").order_by(sorted_by or '-created')
+    else:
+        products = Product.objects.filter(category=category).prefetch_related(
+            "body_color").select_related("category", "design").order_by(sorted_by or '-created')
 
     suggested_products = products.annotate(
         avg_rating=Avg("ratings__average")).order_by("-avg_rating")[:6]
@@ -155,7 +160,8 @@ def search_products(request, page=1):
         products = Product.objects.filter(
             Q(title__icontains=search) |
             Q(description__icontains=search) |
-            Q(category__title__icontains=search)
+            Q(category__title__icontains=search) |
+            Q(design__title__icontains=search)
         ).order_by(sorted_by or 'created').distinct()
         # tag = Product.objects.filter(tag__title__icontains=search)
         # print(tag)
