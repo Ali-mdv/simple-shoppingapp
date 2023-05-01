@@ -16,9 +16,7 @@ from django.urls import reverse
 
 class ProductManager(models.Manager):
     def available(self):
-        # return self.filter(status=True)
         return self.order_by("-status")
-        # return self.filter(number = True)
 
 
 # Create your models here.
@@ -38,24 +36,6 @@ class Color(models.Model):
         return self.title
 
 
-class Mattress(models.Model):
-    title = models.CharField(max_length=120, verbose_name='عنوان')
-    color = models.ForeignKey(
-        Color, on_delete=models.CASCADE, verbose_name='رنگ تشک')
-    image = models.ImageField(upload_to='mattress', verbose_name='عکس')
-
-    class Meta:
-        verbose_name = 'تشک'
-        verbose_name_plural = 'تشک ها'
-
-    def __str__(self):
-        return self.title
-
-    def image_tag(self):
-        return format_html('<img src="{}" width=80px height=50px>'.format(self.image.url))
-    image_tag.short_description = 'عکس'
-
-
 class IPAdrees(models.Model):
     ip_address = models.GenericIPAddressField(verbose_name='آی پی آدرس')
 
@@ -64,18 +44,15 @@ class IPAdrees(models.Model):
 
 
 class Category(models.Model):
-    CATEGORY_TYPE = (
-        ("S", "تاب"),
-        ("M", "مدل"),
-        ("T", "بافت")
-    )
     parent = models.ForeignKey(
-        "self", default=None, blank=True, null=True, on_delete=models.SET_NULL, related_name="children", verbose_name="زیر دسته")
+        "self", default=None, blank=True, null=True,
+        on_delete=models.SET_NULL, related_name="children", verbose_name="زیر دسته"
+    )
     title = models.CharField(max_length=60, verbose_name='عنوان')
     slug = models.CharField(unique=True, max_length=60, verbose_name='آدرس')
     status = models.BooleanField(default=False, verbose_name='وضعیت موجودی')
-    category_type = models.CharField(
-        max_length=1, choices=CATEGORY_TYPE, verbose_name='نوع دسته بندی')
+    is_parent = models.BooleanField(
+        default=False, verbose_name="آیا دسته بندی اصلی می باشد؟")
 
     class Meta:
         verbose_name = 'دسته بندی'
@@ -84,13 +61,20 @@ class Category(models.Model):
     def __str__(self) -> str:
         return self.title
 
-    def show_type(self) -> str:
-        if self.category_type == "M":
-            return "مدل"
-        if self.category_type == "T":
-            return "بافت"
-        else:
-            return "تاب"
+
+class Design(models.Model):
+    title = models.CharField(max_length=60, verbose_name='عنوان')
+    slug = models.CharField(unique=True, max_length=60, verbose_name='آدرس')
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, verbose_name='دسته بندی')
+    status = models.BooleanField(default=False, verbose_name='وضعیت موجودی')
+
+    class Meta:
+        verbose_name = 'طرح محصول'
+        verbose_name_plural = 'طرح های محصول'
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class Product(models.Model):
@@ -103,9 +87,11 @@ class Product(models.Model):
     price = models.DecimalField(
         max_digits=11, decimal_places=0, verbose_name='قیمت')
     body_color = models.ManyToManyField(Color, verbose_name='رنگ بدنه')
-    mattress = models.ManyToManyField(Mattress, verbose_name="تشک")
     number = models.IntegerField(default=0, verbose_name='تعداد')
-    category = models.ManyToManyField(Category, verbose_name="دسته بندی")
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, verbose_name="دسته بندی")
+    design = models.ForeignKey(
+        Design, on_delete=models.CASCADE, verbose_name="طرح محصول")
     status = models.BooleanField(default=False, verbose_name='وضعیت موجودی')
     created = models.DateTimeField(
         auto_now=True, verbose_name='زمان', editable=False)
@@ -140,19 +126,9 @@ class Product(models.Model):
         return natural_time
     created_humanize.short_description = 'تاریخ ایجاد'
 
-    def category_to_str(self):
-        return ", ".join([category.title for category in self.category.all()])
-    category_to_str.short_description = "دسته بندی"
-
     def color_to_str(self):
         return ", ".join([color.title for color in self.body_color.all()])
     color_to_str.short_description = "رنگ"
-
-    def get_model(self):
-        return self.category.get(category_type="M")
-
-    def get_texture(self):
-        return self.category.get(category_type="T")
 
     def get_total_price(self):
         return round(self.price - self.price * self.discount if self.is_special else self.price)
@@ -206,12 +182,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.product.title}, {self.user.username}"
-
-
-# => generate unique slug for each instance from product model
-# def product_pre_save_slug(sender, instance, *args, **kwargs):
-#     if not instance.slug:
-#         instance.slug = unique_slug_generator(instance)
-
-
-# pre_save.connect(product_pre_save_slug, sender=Product)

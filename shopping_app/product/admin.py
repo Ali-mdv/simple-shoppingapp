@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (Product, Color, ProductGallery,
-                     Mattress, IPAdrees, Category, Comment)
-from .forms import ProductModelForm
+                     IPAdrees, Category, Design, Comment)
+# from .forms import ProductModelForm
 # Register your models here.
 
 
@@ -19,26 +19,26 @@ class ProductGalleryInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    form = ProductModelForm
-    list_display = ('title', 'image_tag', 'color_to_str',
-                    'category_to_str', 'price', 'number', 'status', 'created_humanize')
+    # form = ProductModelForm
+    list_display = ('title', 'image_tag', 'color_to_str', 'category', 'design',
+                    'price', 'number', 'status', 'created_humanize')
     list_filter = ('body_color', 'status', 'created')
     search_fields = ('title', 'price', 'body_color__title', 'category__title')
     readonly_fields = ('count_sold', )
     inlines = [ProductGalleryInline, ]
 
 
-@admin.register(Mattress)
-class ProductMattressAdmin(admin.ModelAdmin):
-    list_display = ('title', 'color', 'image_tag')
+@admin.register(Category)
+class ProductCategoryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug', 'parent')
     list_filter = ('title',)
     search_fields = ('title',)
 
 
-@admin.register(Category)
-class ProductCategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'category_type')
-    list_filter = ('title', 'category_type')
+@admin.register(Design)
+class ProductDesignAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug', 'category')
+    list_filter = ('title',)
     search_fields = ('title',)
 
 
