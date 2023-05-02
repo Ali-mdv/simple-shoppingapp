@@ -27,7 +27,7 @@
                 <td class="text-center">تصویر</td>
                 <td class="text-left">نام محصول</td>
                 <td class="text-left">مدل</td>
-                <td class="text-left">بافت</td>
+                <td class="text-left">طرح</td>
                 <td class="text-right">موجودی</td>
                 <td class="text-right">قیمت واحد</td>
                 <td class="text-right">عملیات</td>
@@ -38,8 +38,8 @@
               <tr id="{{ item.id }}">
                 <td class="text-center"><a href="{{item.get_absolute_url}}"><img src="{{item.image.url}}" alt="{{item.title}}" title="{{item.title}}" class="img-thumbnail" width="70px"/></a></td>
                 <td class="text-left">{{item.title}}</td>
-                <td class="text-left">{{item.get_model}}</td>
-                <td class="text-left">{{item.get_texture}}</td>
+                <td class="text-left">{{item.category}}</td>
+                <td class="text-left">{{item.design}}</td>
                 <td class="text-right">موجود</td>
                 <td class="text-right"><div class="price"> {{item.price|price}} </div></td>
                 <td class="text-right">
