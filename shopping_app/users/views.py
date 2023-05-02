@@ -67,7 +67,11 @@ def signup(request):
             email = EmailMessage(
                 mail_subject, message, to=[to_email]
             )
-            email.send()
+            try:
+                email.send()
+            except:
+                user.delete()
+                return HttpResponse('Somethings went wrong.\n<p><a href="/account/signup">Please try again later.</a></p>')
             return HttpResponse('Please confirm your email address to complete the registration')
     else:
         form = SignupForm()
