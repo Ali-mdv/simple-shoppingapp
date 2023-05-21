@@ -61,18 +61,34 @@ class Category(models.Model):
     def __str__(self) -> str:
         return self.title
 
+    def sub_categoty_products(self):
+        if self.is_parent:
+            childs = self.children.filter(status=True)
+            products = Product.objects.select_related(
+                "category").prefetch_related(
+                'color').filter(
+                category__in=childs)
+            return products
+        return None
+
 
 class Product(models.Model):
     title = models.CharField(max_length=60, verbose_name="عنوان")
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     image = models.ImageField(upload_to='products', verbose_name='عکس')
-    description = models.TextField(max_length=500, verbose_name='توضیحات')
+    introduction = models.TextField(verbose_name='معرفی اجمالی')
     price = models.DecimalField(
         max_digits=11, decimal_places=0, verbose_name='قیمت')
-    body_color = models.ManyToManyField(Color, verbose_name='رنگ بدنه')
+    color = models.ManyToManyField(Color, verbose_name='رنگ')
     number = models.IntegerField(default=0, verbose_name='تعداد')
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, verbose_name="دسته بندی")
+    weight = models.DecimalField(null=True, blank=True,
+                                 max_digits=5, decimal_places=1, verbose_name="وزن")
+    dimensions = models.CharField(
+        null=True, blank=True, max_length=20, verbose_name="ابعاد")
+    other_description = models.TextField(null=True, blank=True,
+                                         max_length=500, verbose_name='توضیحات دیگر')
     status = models.BooleanField(default=False, verbose_name='وضعیت موجودی')
     created = models.DateTimeField(
         auto_now=True, verbose_name='زمان', editable=False)
@@ -108,7 +124,7 @@ class Product(models.Model):
     created_humanize.short_description = 'تاریخ ایجاد'
 
     def color_to_str(self):
-        return ", ".join([color.title for color in self.body_color.all()])
+        return ", ".join([color.title for color in self.color.all()])
     color_to_str.short_description = "رنگ"
 
     def get_total_price(self):

@@ -34,8 +34,8 @@ class ProductAdmin(admin.ModelAdmin):
     # form = ProductModelForm
     list_display = ('title', 'image_tag', 'color_to_str', 'category',
                     'price', 'number', 'status', 'created_humanize')
-    list_filter = ('body_color', 'status', 'created')
-    search_fields = ('title', 'price', 'body_color__title', 'category__title')
+    list_filter = ('category', 'status', 'created')
+    search_fields = ('title', 'price', 'color__title', 'category__title')
     readonly_fields = ('count_sold', )
     inlines = [ProductSpecificationValueInline, ProductGalleryInline]
 
