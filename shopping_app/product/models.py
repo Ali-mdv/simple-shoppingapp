@@ -62,36 +62,17 @@ class Category(models.Model):
         return self.title
 
 
-class Design(models.Model):
-    title = models.CharField(max_length=60, verbose_name='عنوان')
-    slug = models.CharField(unique=True, max_length=60, verbose_name='آدرس')
-    category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, verbose_name='دسته بندی')
-    status = models.BooleanField(default=False, verbose_name='وضعیت موجودی')
-
-    class Meta:
-        verbose_name = 'طرح محصول'
-        verbose_name_plural = 'طرح های محصول'
-
-    def __str__(self) -> str:
-        return self.title
-
-
 class Product(models.Model):
     title = models.CharField(max_length=60, verbose_name="عنوان")
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     image = models.ImageField(upload_to='products', verbose_name='عکس')
     description = models.TextField(max_length=500, verbose_name='توضیحات')
-    # price = MoneyField(verbose_name='قیمت', max_digits=9,
-    #                    decimal_places=0, default_currency='IRR')
     price = models.DecimalField(
         max_digits=11, decimal_places=0, verbose_name='قیمت')
     body_color = models.ManyToManyField(Color, verbose_name='رنگ بدنه')
     number = models.IntegerField(default=0, verbose_name='تعداد')
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, verbose_name="دسته بندی")
-    design = models.ForeignKey(
-        Design, on_delete=models.CASCADE, verbose_name="طرح محصول")
     status = models.BooleanField(default=False, verbose_name='وضعیت موجودی')
     created = models.DateTimeField(
         auto_now=True, verbose_name='زمان', editable=False)
@@ -144,6 +125,34 @@ class Product(models.Model):
         return reverse('product:detail', args=[self.uuid])
 
     objects = ProductManager()
+
+
+class ProductSpecification(models.Model):
+    """
+    The Product Specification Table contains product
+    specifiction or features for the category.
+    """
+    category = models.ForeignKey(
+        Category, on_delete=models.RESTRICT, verbose_name='دسته بندی')
+    attribute = models.CharField(max_length=255, verbose_name='ویژگی')
+
+    def __str__(self):
+        return self.attribute
+
+
+class ProductSpecificationValue(models.Model):
+    """
+    The Product Specification Value table holds each of the
+    products individual attribute or bespoke features.
+    """
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name='specifications', verbose_name='محصول')
+    specification = models.ForeignKey(
+        ProductSpecification, on_delete=models.CASCADE, verbose_name='ویژگی')
+    value = models.CharField(max_length=255, verbose_name='مقدار')
+
+    def __str__(self):
+        return self.value
 
 
 class ProductGallery(models.Model):
