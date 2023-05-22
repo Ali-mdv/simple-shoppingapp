@@ -38,7 +38,7 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'djmoney.contrib.exchange',
+    # 'djmoney.contrib.exchange',
 ]
 
 LOCAL_APPS = [
@@ -85,7 +85,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [APP_DIR / 'templates', ],
+        'DIRS': [APP_DIR / 'templates',
+                 '/path/to/debug_toolbar/templates',
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -154,7 +156,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     APP_DIR / "static",
 ]
-
+STATIC_ROOT = APP_DIR / "staticfiles"
 
 # Media files
 # ------------------------------------------------------------------------------

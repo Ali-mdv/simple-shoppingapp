@@ -8,14 +8,14 @@ ALLOWED_HOSTS = []
 # APPS
 # ------------------------------------------------------------------------------
 THIRD_PARTY_APPS += [
-    "debug_toobar"
+    "debug_toolbar",
 ]
 
 
 # MIDDLEWARE
 # ------------------------------------------------------------------------------
 MIDDLEWARE += [
-    "debug_toolbar.middleware.DebugToolbarMiddleware"
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 
@@ -37,7 +37,8 @@ DATABASES = {
 # djangi-debug_toolbar
 # ------------------------------------------------------------------------------
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
+INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + \
+    ["127.0.0.1", "10.0.2.2"]
 
 
 # SSL security

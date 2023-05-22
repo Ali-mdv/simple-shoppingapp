@@ -1,4 +1,4 @@
 -r base.txt
 
-django-debug-toolbar==2.2
+django-debug-toolbar==4.1.0
 autopep8==1.7.0

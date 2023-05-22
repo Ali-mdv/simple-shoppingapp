@@ -57,6 +57,13 @@ SESSION_COOKIE_SECURE = config(
 CSRF_COOKIE_SECURE = config("DJANGO_CSRF_COOCKIE_SECURE", default=True)
 
 
+# Static files (CSS, JavaScript, Images)
+# ------------------------------------------------------------------------------
+STATICFILES_DIRS = [
+    APP_DIR / "staticfiles",
+]
+
+
 # EMAIL BACKEND
 # ------------------------------------------------------------------------------
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
