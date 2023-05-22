@@ -3,12 +3,6 @@
 {% load custom_filters %}
 
 <aside id="column-left" class="col-sm-3 hidden-xs">
-    <h3 class="subtitle">مدل های تاب ریلکسی</h3>
-    <div class="box-category">
-      <ul id="cat_accordion">
-        {% category_aside %}
-      </ul>
-    </div>
     {% if request.resolver_match.url_name == "home" %}
     <h3 class="subtitle">پربازدیدترین</h3>
     <div class="side-item">

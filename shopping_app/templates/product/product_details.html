@@ -28,11 +28,6 @@
           <span itemprop="title">{{product.category.title}}</span>
         </a>
       </li>
-      <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-        <a href="#" itemprop="url">
-          <span itemprop="title">{{product.design.title}}</span>
-        </a>
-      </li>
     </ul>
     <!-- Breadcrumb End-->
     <div class="row">
@@ -54,7 +49,6 @@
             <div class="col-sm-6">
               <ul class="list-unstyled description">
                 <li><b>مدل :</b> <a href="#"><span itemprop="brand">{{product.category}}</span></a></li>
-                <li><b>طرح :</b> <a href="#"><span itemprop="brand">{{product.design}}</span></a></li>
                 <li><b>کد محصول :</b> <span itemprop="mpn">محصولات 17</span></li>
                 <li><b>وضعیت موجودی :</b> 
                   <span class="{{ product.status|yesno:'instock,nostock' }}">{{ product.status|yesno:'موجود,ناموجود' }}</span>
@@ -76,7 +70,7 @@
                 </li>
               </ul>
               <div id="product">
-                <h3 class="subtitle">انتخاب های در دسترس</h3>
+                <h3 class="subtitle">انتخاب رنگ</h3>
                 <form action="{% url 'order:add_order' %}" method="post">
                   {% csrf_token %}
                   <input type="hidden" name="product_id" value="{{product.id}}">
@@ -84,7 +78,7 @@
                     <label class="control-label">رنگ</label>
                     <select class="form-control" id="input-option200" name="color" required>
                       <option value=""> --- لطفا انتخاب کنید --- </option>
-                      {% for color in product.body_color.all %}
+                      {% for color in product.color.all %}
                         <option value="{{color.id}}">{{color.title}} </option>
                       {% endfor %}
                     </select>
@@ -116,7 +110,7 @@
             </div>
           </div>
           <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab-description" data-toggle="tab">توضیحات</a></li>
+            <li class="active"><a href="#tab-description" data-toggle="tab">معرفی اجمالی محصول</a></li>
             <li><a href="#tab-specification" data-toggle="tab">مشخصات</a></li>
             <li><a href="#tab-review" data-toggle="tab">دیدگاه {{product.comments.count}}</a></li>
             {% if request.user.is_authenticated %}
@@ -126,14 +120,14 @@
           <div class="tab-content">
             <div itemprop="description" id="tab-description" class="tab-pane active">
               <div>
-                {{product.description}}
+                {{product.introduction|linebreaksbr}}
               </div>
             </div>
             <div id="tab-specification" class="tab-pane">
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <td colspan="2"><strong>مشخصات سبد</strong></td>
+                    <td colspan="2"><strong>مشخصات کلی</strong></td>
                   </tr>
                 </thead>
                 <tbody>
@@ -144,8 +138,14 @@
                 </tbody>
                 <tbody>
                   <tr>
-                    <td>طرح</td>
-                    <td>{{product.design}}</td>
+                    <td>ابعاد</td>
+                    <td>{{product.dimensions}}</td>
+                  </tr>
+                </tbody>
+                <tbody>
+                  <tr>
+                    <td>وزن</td>
+                    <td>{{product.weight}} کیلوگرم</td>
                   </tr>
                 </tbody>
                 <tbody>
@@ -158,19 +158,21 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <td colspan="2"><strong>مشخصات کلی</strong></td>
+                    <td colspan="2"><strong>دیگر مشخصات</strong></td>
                   </tr>
                 </thead>
+                {% for attribute in product.specifications.all %}
                 <tbody>
                   <tr>
-                    <td>طول ستون</td>
-                    <td>۲ متر</td>
+                    <td>{{ attribute.specification }}</td>
+                    <td>{{ attribute.value }}</td>
                   </tr>
                 </tbody>
+                {% endfor %}
                 <tbody>
                   <tr>
-                    <td>عرض پایه</td>
-                    <td>۱ متر</td>
+                    <td>سایر مشخصات</td>
+                    <td>{{product.other_description|linebreaksbr}}</td>
                   </tr>
                 </tbody>
               </table>

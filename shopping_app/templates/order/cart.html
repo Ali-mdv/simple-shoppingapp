@@ -38,7 +38,7 @@
                 <tr>
                   <td class="text-center"><a href="{{detail.product.get_absolute_url}}"><img src="{{detail.product.image.url}}" alt="{{detail.product.title}}" title="{{detail.product.title}}" class="img-thumbnail" width="70px"/></a></td>
                   <td class="text-left"><a href="{{detail.product.get_absolute_url}}">{{detail.product.title}}</a><br />
-                  <td class="text-left">{{detail.product.category}}|{{detail.product.design}}</td>
+                  <td class="text-left">{{detail.product.category.parent}}|{{detail.product.category}}</td>
                   <td class="text-left"><div class="input-group btn-block quantity">
                       <input type="text" name="quantity" value="{{detail.count}}" size="1" class="form-control" readonly/>
                       <span class="input-group-btn">
