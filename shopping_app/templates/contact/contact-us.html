@@ -1,6 +1,7 @@
 {% extends 'components/_base.html' %}
 {% load static %}
 {% load widget_tweaks %}
+{% load custom_filters %}
 
 
 {% block title %}
@@ -39,12 +40,12 @@
                   <div class="col-sm-3">
                     {% if site_info.landline %}
                       <strong>شماره تلفن ثابت</strong><br />
-                      {{site_info.landline}}<br />
+                      {{site_info.landline|phone}}<br />
                       <br />
                     {% endif %}
                     {% if site_info.phonenumber %}
                       <strong>شماره تلفن همراه</strong><br />
-                      {{site_info.phonenumber}}
+                      {{site_info.phonenumber|phone}}
                     {% endif %}
                   </div>
                   <div class="col-sm-3">

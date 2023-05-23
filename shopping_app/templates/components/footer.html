@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 
 <footer id="footer">
     <div class="fpart-first">
@@ -9,10 +10,10 @@
             <ul>
               <li class="address"><i class="fa fa-map-marker"></i>{{site_info.address}}</li>
               {% if site_info.landline %}
-              <li class="mobile"><i class="fa fa-phone"></i>{{site_info.landline}}</li>
+              <li class="mobile"><i class="fa fa-phone"></i>{{site_info.landline|phone}}</li>
               {% endif %}
               {% if site_info.phonenumber %}
-              <li class="mobile"><i class="fa fa-phone"></i>{{site_info.phonenumber}}</li>
+              <li class="mobile"><i class="fa fa-phone"></i>{{site_info.phonenumber|phone}}</li>
               {% endif %}
               <li class="email"><i class="fa fa-envelope"></i>برقراری ارتباط از طریق <a href="{% url 'contact:contact_us' %}">تماس با ما</a>
             </ul>

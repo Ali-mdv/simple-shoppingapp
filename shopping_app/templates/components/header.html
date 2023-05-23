@@ -1,6 +1,7 @@
 {% load static %}
 {% load cart_tags %}
 {% load base_tags %}
+{% load custom_filters %}
 
 <div id="header">
     <!-- Top Bar Start-->
@@ -10,7 +11,7 @@
           <div class="pull-left flip left-top">
             <div class="links">
               <ul>
-                <li class="mobile"><i class="fa fa-phone"></i>{{site_info.phonenumber}}</li>
+                <li class="mobile"><i class="fa fa-phone"></i>{{site_info.phonenumber|phone}}</li>
                 <li class="email"><a href="mailto:{{site_info.email}}"><i class="fa fa-envelope"></i>{{site_info.email}}</a></li>
                 {% if request.user.is_authenticated %}
                 <li><a href="{% url 'users:wishlist' %}">لیست علاقه مندی</a></li>
