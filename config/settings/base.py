@@ -48,6 +48,7 @@ LOCAL_APPS = [
     'product_slider.apps.ProductSliderConfig',
     'contact.apps.ContactConfig',
     'product_order.apps.ProductOrderConfig',
+    'static_data.apps.StaticDataConfig',
 ]
 
 THIRD_PARTY_APPS = [
