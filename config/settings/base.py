@@ -98,6 +98,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # django render partial
                 'django.template.context_processors.request',
+                # site information
+                'static_data.context_processors.site_info',
             ],
         },
     },
