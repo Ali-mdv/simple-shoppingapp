@@ -7,7 +7,11 @@
   <meta name="format-detection" content="telephone=no" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link href="{% static '/product/image/favicon.png' %}" rel="icon" />
-  <title>{% block title %}{% endblock %}</title>
+  <title>
+    {% block title %}
+    {{site_info.local_name}}
+    {% endblock %}
+  </title>
   <meta name="description" content="shahre taab is online shop for swing and garden products">
   <!-- CSS Part Start-->
   <link rel="stylesheet" type="text/css" href="{% static '/product/js/bootstrap/css/bootstrap.min.css' %}" />

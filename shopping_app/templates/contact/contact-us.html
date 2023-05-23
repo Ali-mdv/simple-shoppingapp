@@ -4,7 +4,7 @@
 
 
 {% block title %}
-فروشگاه شهر تاب | ارتباط با ما
+{{site_info.local_name}} | ارتباط با ما
 {% endblock %}
 
 {% block content %}
@@ -31,28 +31,28 @@
                       />
                   </div>
                   <div class="col-sm-3">
-                      <strong>قالب مارکت شاپ</strong><br />
+                      <strong>{{site_info.local_name}}</strong><br />
                       <address>
-                          میدان مرکزی،<br />
-                          خیابان وینگ شماره 22،<br />
-                          نیویورک،<br />
-                          ایالات متحده
+                        {{site_info.address}}
                       </address>
                   </div>
                   <div class="col-sm-3">
-                      <strong>شماره تلفن</strong><br />
-                      +91 9898989898<br />
+                    {% if site_info.landline %}
+                      <strong>شماره تلفن ثابت</strong><br />
+                      {{site_info.landline}}<br />
                       <br />
-                      <strong>فکس</strong><br />
-                      +91 9898989898
+                    {% endif %}
+                    {% if site_info.phonenumber %}
+                      <strong>شماره تلفن همراه</strong><br />
+                      {{site_info.phonenumber}}
+                    {% endif %}
                   </div>
                   <div class="col-sm-3">
-                      <strong>ساعات کار</strong><br />
-                      خدمات مشتریان 24x7<br />
-                      <br />
-                      <strong>دیدگاه ها</strong><br />
-                      در اینجا توضیحات دلخواه خود را قرار دهید. فروشگاه چک
-                      قبول نمیکند!
+                    <strong>ایمیل</strong><br />
+                    {{site_info.email}}<br />
+                    <br />
+                    <strong>ساعت کاری</strong><br />
+                    همه روزه تا ساعت ۵ عصر به جز روزهای تعطیل
                   </div>
               </div>
               <form class="form-horizontal" method="post">{% csrf_token %}

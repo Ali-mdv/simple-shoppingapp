@@ -7,8 +7,13 @@
           <div class="contact col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <h5>اطلاعات تماس</h5>
             <ul>
-              <li class="address"><i class="fa fa-map-marker"></i>میدان تایمز، شماره 77، نیویورک</li>
-              <li class="mobile"><i class="fa fa-phone"></i>+21 9898777656</li>
+              <li class="address"><i class="fa fa-map-marker"></i>{{site_info.address}}</li>
+              {% if site_info.landline %}
+              <li class="mobile"><i class="fa fa-phone"></i>{{site_info.landline}}</li>
+              {% endif %}
+              {% if site_info.phonenumber %}
+              <li class="mobile"><i class="fa fa-phone"></i>{{site_info.phonenumber}}</li>
+              {% endif %}
               <li class="email"><i class="fa fa-envelope"></i>برقراری ارتباط از طریق <a href="{% url 'contact:contact_us' %}">تماس با ما</a>
             </ul>
           </div>
@@ -35,16 +40,22 @@
           </div>
           <div class="column col-lg-2 col-md-2 col-sm-3 col-xs-12">
             <h5>همراه ما باشید</h5>
-            <div class="social pull-right"> 
-              <a href="#" target="_blank"> 
+            <div class="social pull-right">
+              {% if site_info.telegram_link %}
+              <a href="{{site_info.telegram_link}}" target="_blank"> 
                 <img data-toggle="tooltip" src="{% static '/product/image/socialicons/telegram.png' %}" alt="Telegram" title="Telegram">
               </a> 
-              <a href="#" target="_blank"> 
+              {% endif %}
+              {% if site_info.instagram_link %}
+              <a href="{{site_info.instagram_link}}" target="_blank"> 
                 <img data-toggle="tooltip" src="{% static '/product/image/socialicons/instagram.png' %}" alt="Instagram" title="Instagram"> 
               </a> 
-              <a href="#" target="_blank"> 
+              {% endif %}
+              {% if site_info.whatsapp_link %}
+              <a href="{{site_info.whatsapp_link}}" target="_blank"> 
                 <img data-toggle="tooltip" src="{% static '/product/image/socialicons/whatsapp.png' %}" alt="Whatsapp" title="Whatsapp"> 
               </a> 
+              {% endif %}
             </div>
           </div>
         </div>
