@@ -50,18 +50,12 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = config(
 SECURE_HSTS_PRELOAD = config(
     "DJANGO_SECURE_HSTS_PRELOAD", cast=bool, default=True)
 
+
 # secure coockies
 # ------------------------------------------------------------------------------
 SESSION_COOKIE_SECURE = config(
     "DJANGO_SESSION_COOCKIE_SECURE", default=True)
 CSRF_COOKIE_SECURE = config("DJANGO_CSRF_COOCKIE_SECURE", default=True)
-
-
-# Static files (CSS, JavaScript, Images)
-# ------------------------------------------------------------------------------
-STATICFILES_DIRS = [
-    APP_DIR / "staticfiles",
-]
 
 
 # EMAIL BACKEND
