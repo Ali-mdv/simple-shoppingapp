@@ -10,4 +10,4 @@ from .models import (
 class SiteInfoAdmin(admin.ModelAdmin):
     form = SiteInfoForm
     list_display = ("local_name", "english_name",
-                    "phonenumber", "email", "domain")
+                    "phonenumber", "email", "domain", "status")

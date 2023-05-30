@@ -14,7 +14,7 @@ class SiteInfo(models.Model):
         null=True, blank=True, verbose_name="تلفن ثابت")
     email = models.EmailField(max_length=50, verbose_name="ایمیل")
     address = models.TextField(max_length=100, verbose_name="آدرس فروشگاه")
-    domain = models.URLField(null=True, blank=True, verbose_name="دامنه سایت")
+    domain = models.CharField(max_length=50,default="localhost", verbose_name="دامنه سایت")
     telegram_link = models.URLField(null=True, blank=True, verbose_name="آدرس تلگرام")
     instagram_link = models.URLField(null=True, blank=True, verbose_name="آدرس اینستاگرام")
     whatsapp_link = models.URLField(null=True, blank=True, verbose_name="آدرس واتساپ")
