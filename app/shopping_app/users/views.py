@@ -7,7 +7,6 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 
 from django.http import HttpResponse, JsonResponse
-from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
@@ -18,6 +17,7 @@ from .tokens import account_activation_token
 from .models import User, UserAddress, UserWishList
 from product.models import Product
 
+from static_data.models import SiteInfo
 # Create your views here.
 
 
@@ -55,7 +55,13 @@ def signup(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
-            current_site = get_current_site(request)
+
+            try:
+                current_site = SiteInfo.objects.get(
+                    status=True)  # get domain site
+            except:
+                current_site = request.get_host()
+
             mail_subject = 'Activate your blog account.'
             message = render_to_string('registration/acc_active_email.html', {
                 'user': user,

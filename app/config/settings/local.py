@@ -2,7 +2,11 @@ import socket
 from .base import *
 
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "app",
+    "127.0.0.1",
+    "localhost",
+]
 
 
 # APPS
@@ -27,7 +31,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config("POSTGRES_DB"),
         'USER': config("POSTGRES_USER"),
-        'HOST': 'localhost',
+        # 'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': config("POSTGRES_PORT"),
         'PASSWORD': config("POSTGRES_PASSWORD")
     }
@@ -67,3 +72,11 @@ CSRF_COOKIE_SECURE = config("DJANGO_CSRF_COOCKIE_SECURE", default=False)
 # EMAIL BACKEND
 # ------------------------------------------------------------------------------
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# CSRF TRUSTED ORIGINS
+# ------------------------------------------------------------------------------
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1',
+]

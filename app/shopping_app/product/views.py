@@ -159,7 +159,7 @@ def search_products(request, page=1):
     if search is not None:
         products = Product.objects.filter(
             Q(title__icontains=search) |
-            Q(description__icontains=search) |
+            Q(introduction__icontains=search) |
             Q(category__title__icontains=search)
         ).order_by(sorted_by or 'created').distinct()
         # tag = Product.objects.filter(tag__title__icontains=search)

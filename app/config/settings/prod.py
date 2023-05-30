@@ -3,7 +3,9 @@ from .base import *
 
 DEBUG = config('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [
+    "app"
+]
 
 
 # MIDDLEWARE
@@ -66,3 +68,8 @@ EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+
+# CSRF TRUSTED ORIGINS
+# ------------------------------------------------------------------------------
+CSRF_TRUSTED_ORIGINS = []
