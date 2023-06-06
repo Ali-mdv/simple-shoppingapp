@@ -74,7 +74,7 @@ def product_detail(request, uuid):
         comment = None
 
     # get all commnet about this product
-    comments = Comment.objects.filter(product_id=product.id)
+    comments = Comment.objects.filter(product_id=product.id).order_by('-date')
     comment_form = CommentModelForm(
         instance=comment)  # fill user comment in form
 

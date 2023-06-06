@@ -21,3 +21,10 @@ def change_image_size(path, x_size, y_size):
     image = Image.open(path)
     image = image.resize(output_size)
     return image
+
+
+def remove_exif_data(path):
+    with Image.open(path) as f:
+        f.getexif().clear()
+        f.save(f, image_file.content_type)
+    return f

@@ -50,8 +50,8 @@
         <div class="slideshow single-slider owl-carousel">
           {% for slide in slider_items %}
           <div class="item"> 
-            <a href="#">
-              <img class="img-responsive" src="{{slide.image.url}}" alt="{{slide.title}}" />
+            <a href="{{slide.link}}">
+              <img class="img-responsive img-slide-size" src="{{slide.image.url}}" alt="{{slide.title}}" title="{{slide.title}}" />
             </a>
           </div>
           {% endfor %}

@@ -22,6 +22,13 @@
           <h1 class="title">تسویه حساب</h1>
           <h2 class="subtitle"></h2>
           <div class="row">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+              {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
             <div class="col-sm-4">
               <div class="panel panel-default">
                 <div class="panel-heading">

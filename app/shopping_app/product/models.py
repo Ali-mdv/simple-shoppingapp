@@ -109,13 +109,8 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        image = change_image_size(self.image.path, 500, 500)
-        image.save(self.image.path)
-
     def image_tag(self):
-        return format_html('<img src="{}" width=80px height=50px>'.format(self.image.url))
+        return format_html('<img src="{}" width=60px height=70px>'.format(self.image.url))
     image_tag.short_description = 'عکس'
 
     def created_humanize(self):
@@ -180,11 +175,6 @@ class ProductGallery(models.Model):
         verbose_name = 'گالری محصول'
         verbose_name_plural = 'گالری محصولات'
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        image = change_image_size(self.image.path, 500, 500)
-        image.save(self.image.path)
-
     def __str__(self):
         return self.image.name
 
@@ -207,3 +197,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.product.title}, {self.user.username}"
+
+    def date_humanize(self):
+        natural_time = naturalday(self.date)
+        return natural_time

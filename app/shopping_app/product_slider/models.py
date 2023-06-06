@@ -20,9 +20,9 @@ class Slider(models.Model):
         return self.title
 
     def image_tag(self):
-        return format_html('<img src="{}" width=80px height=50px>'.format(self.image.url))
+        return format_html('<img src="{}" width=70px height=60px>'.format(self.image.url))
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        image = change_image_size(self.image.path, 920, 380)
-        image.save(self.image.path)
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
+    #     image = change_image_size(self.image.path, 920, 380)
+    #     image.save(self.image.path)

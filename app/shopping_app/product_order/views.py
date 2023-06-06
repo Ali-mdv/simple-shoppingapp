@@ -2,6 +2,7 @@ from django.http.response import Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
+from django.contrib import messages
 import requests
 from datetime import datetime
 from decouple import config
@@ -33,7 +34,8 @@ def add_item_order(request):
 
         order.orderdetail_set.create(
             product_id=product.id, price=product.get_total_price(), count=count)
-    return redirect('product:detail', uuid=product.uuid)
+        return redirect('product:detail', uuid=product.uuid)
+    return redirect("product:home")
 
 
 @login_required
@@ -164,13 +166,15 @@ def send_request(request):
         response = requests.post(
             'https://api.zarinpal.com/pg/v4/payment/request.json', params)
 
-        if response.json()["data"]["code"] == 100:
-            authority = response.json()["data"]["authority"]
-            order.ref_id = authority
-            order.save()
-            return redirect(f'https://www.zarinpal.com/pg/StartPay/{authority}')
-
-        else:
+        try:
+            if response.json()["data"]["code"] == 100:
+                authority = response.json()["data"]["authority"]
+                order.ref_id = authority
+                order.save()
+                return redirect(f'https://www.zarinpal.com/pg/StartPay/{authority}')
+        except:
+            messages.warning(
+                request, 'برای انتقال به درگاه پرداخت از خاموش بودن وی پی ان خود اطمینان حاصل فرمایید و مجددا تلاش کنید.')
             return redirect("order:checkout-order")
 
     return redirect("product:home")

@@ -48,7 +48,7 @@
             </div>
             <div class="col-sm-6">
               <ul class="list-unstyled description">
-                <li><b>مدل :</b> <a href="#"><span itemprop="brand">{{product.category}}</span></a></li>
+                <li><b>دسته : </b><span itemprop="brand">{{product.category.parent}}, {{product.category}}</span></li>
                 <li><b>کد محصول :</b> <span itemprop="mpn">محصولات 17</span></li>
                 <li><b>وضعیت موجودی :</b> 
                   <span class="{{ product.status|yesno:'instock,nostock' }}">{{ product.status|yesno:'موجود,ناموجود' }}</span>
@@ -130,12 +130,14 @@
                     <td colspan="2"><strong>مشخصات کلی</strong></td>
                   </tr>
                 </thead>
+                {% for attribute in product.specifications.all %}
                 <tbody>
                   <tr>
-                    <td>مدل</td>
-                    <td>{{product.category}}</td>
+                    <td>{{ attribute.specification }}</td>
+                    <td>{{ attribute.value }}</td>
                   </tr>
                 </tbody>
+                {% endfor %}
                 <tbody>
                   <tr>
                     <td>ابعاد</td>
@@ -148,27 +150,6 @@
                     <td>{{product.weight}} کیلوگرم</td>
                   </tr>
                 </tbody>
-                <tbody>
-                  <tr>
-                    <td>رنگ های موجود</td>
-                    <td>{{product.color_to_str}}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <td colspan="2"><strong>دیگر مشخصات</strong></td>
-                  </tr>
-                </thead>
-                {% for attribute in product.specifications.all %}
-                <tbody>
-                  <tr>
-                    <td>{{ attribute.specification }}</td>
-                    <td>{{ attribute.value }}</td>
-                  </tr>
-                </tbody>
-                {% endfor %}
                 <tbody>
                   <tr>
                     <td>سایر مشخصات</td>
@@ -185,7 +166,7 @@
                       <tbody>
                         <tr>
                           <td style="width: 50%;"><strong><span>{{comment.user.username}}</span></strong></td>
-                          <td class="text-right"><span>1395/1/20</span></td>
+                          <td class="text-right"><span>{{comment.date_humanize}}</span></td>
                         </tr>
                         <tr>
                           <td colspan="2"><p>{{comment.text}}</p>
